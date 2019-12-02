@@ -1,0 +1,485 @@
+---
+title: "Case"
+author: "Sophia Zhu"
+date: "10/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+rm(list = ls())
+```
+
+## Load Data
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(rjags)
+library(lubridate)
+library(stringr)
+library(gridExtra)
+load("streetrx.RData")
+```
+
+
+## Clean and Organize Data
+
+```{r}
+# city has 7954 levels, 58 rows out of 76065 has NA, only one form for amphetamines, and it is a pill 
+df <- streetrx %>% filter(api_temp == "amphetamines") %>% droplevels() %>% drop_na() %>% select(-c("city", "api_temp", "country", "form_temp")) 
+df <- df %>% mutate(month =  as.factor(month(as.POSIXlt(price_date, format="%m/%d/%Y"))), year = as.factor(year(as.POSIXlt(price_date, format="%m/%d/%y"))))
+df <- df %>% select(-c("yq_pdate", "price_date")) 
+df$cleaned_source = rep("a", dim(df)[1])
+df <- df %>% mutate(cleaned_source = ifelse(str_detect(source, "Heard it"), "Heard", as.character(cleaned_source)))
+df <- df %>% mutate(cleaned_source = ifelse(str_detect(source, "personal|Personal"), "Personal", as.character(cleaned_source)))
+df <- df %>% mutate(cleaned_source = ifelse(str_detect(source, "pharmacy|Pharmacy"), "Pharmacy", as.character(cleaned_source)))
+df <- df %>% mutate(cleaned_source = ifelse(str_detect(source, "com|net|http|org|yahoo|Face|Goog|goog|silk"), "Internet", as.character(cleaned_source)))
+df <- df %>% mutate(cleaned_source = ifelse(source == "", "Empty", as.character(cleaned_source)))
+df <- df %>% mutate(cleaned_source = ifelse(cleaned_source == "a", "Miscellaenous", as.character(cleaned_source)))
+df <- df  %>%  mutate(source = as.factor(cleaned_source)) %>% select(-c("cleaned_source"))
+df <- df %>% mutate(state = ifelse(state == "USA", "Unknown", as.character(state)))
+df <- df %>% mutate(state = as.factor(state))
+# 24 entries in years with less than 10 entries...pretty pointless so drop them 
+goodyears <- pull(df %>% group_by(year) %>% tally() %>% filter(n > 10), year)
+df <- df%>% filter( year %in% goodyears)
+#5 states with less than 10 entries so drop them, 14 entries  
+goodstates <- pull(df %>% group_by(state) %>% tally() %>% filter(n >= 10), state)
+df <- df%>% filter( state %in% goodstates)
+levels(df$Primary_Reason) = 1:12
+df <- df %>% droplevels()
+removeOutliers<-function(y, threshold = 4){
+  z <- (y - mean(y))/sd(y)
+  z < threshold
+}
+df <- df %>% mutate(logppm = log(ppm + 0.0001))
+df <- df %>% filter(removeOutliers(logppm, threshold = 3))
+save(df,file="CleanedCaseStudyData.Rda")
+```
+
+## Plot Data and EDA
+```{r}
+
+ggplot(df,
+       aes(x = state, y = ppm, color = USA_region)) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               shape = 5,
+               size = 4,
+               position = position_dodge(0.5)) +
+  geom_jitter(position = position_dodge(0.5), alpha = 0.3) +
+  xlab("State") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by State and Region") +
+  theme(axis.text.x = element_text(angle = 90))
+
+```
+```{r}
+ggplot(df,
+       aes(x = source, y = ppm, color = bulk_purchase)) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               shape = 5,
+               size = 4,
+               position = position_dodge(0.5)) +
+  geom_jitter(position = position_dodge(0.5), alpha = 0.3) +
+  xlab("Source") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by Source and Bulk or Not") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+```{r}
+ggplot(df,
+       aes(x = Primary_Reason, y = ppm, color = bulk_purchase)) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               shape = 5,
+               size = 4,
+               position = position_dodge(0.5)) +
+  geom_jitter(position = position_dodge(0.5), alpha = 0.3) +
+  xlab("Primary Reason") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by Primary Reason and Bulk or Not") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+```{r}
+p1<-ggplot(df,
+       aes(x = year, y = ppm, color = month)) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               shape = 5,
+               size = 4,
+               position = position_dodge(0.5)) +
+  geom_jitter(position = position_dodge(0.5), alpha = 0.3) +
+  xlab("year") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by year colored by month") +
+  theme(axis.text.x = element_text(angle = 90))
+
+p2<-ggplot(df,
+       aes(x = month, y = ppm)) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               shape = 5,
+               size = 4,
+               position = position_dodge(0.5)) +
+  geom_jitter(position = position_dodge(0.5), alpha = 0.3) +
+  xlab("month") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by month") +
+  theme(axis.text.x = element_text(angle = 90))
+
+# facet_grid(1, 2)
+grid.arrange(p1,p2, nrow = 1)
+```
+```{r}
+ggplot(df,
+       aes(x = mgstr, y = ppm)) +
+  geom_point(alpha = 0.3) +
+  xlab("Dosage strength in mg") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by year") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+ggplot(df,
+       aes(x = bulk_purchase, y = ppm)) +
+  stat_summary(fun.y = mean,
+               geom = "point",
+               shape = 5,
+               size = 4,
+               position = position_dodge(0.5)) +
+  geom_jitter(position = position_dodge(0.5), alpha = 0.3) +
+  xlab("Bulk") +
+  ylab("PPM ($ per mg)")  + 
+  ggtitle("PPM by  Bulk or Not") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+
+## JAGS Setup
+```{r}
+library(rjags)
+library(coda)
+
+reason_mat = diag(c(sapply(df %>% group_by(Primary_Reason) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))
+reason_mat[12,12] = 1
+reason_mat = solve(reason_mat)
+
+dat <- list("N" = dim(df)[1], 
+            "n_state" = length(unique(levels(df$state))), 
+            "n_source" = length(unique(levels(df$source))), 
+            "n_year" = length(unique(levels(df$year))), 
+            "n_month" = length(unique(levels(df$month))), 
+            "n_reason" = length(unique(levels(df$Primary_Reason))), 
+            "bulk_ind" = as.numeric(df$bulk_purchase),
+            "state" = as.numeric(df$state),
+            "region" = as.numeric(df$USA_region),
+            "source" = as.numeric(df$source),
+            "reason" = as.numeric(df$Primary_Reason),
+            "year" = as.numeric(df$year),
+            "month" = as.numeric(df$month),
+            "mgstr" = df$mgstr,
+            "ppm" = df$logppm, 
+            "mu0" = mean(df$logppm), 
+            "delta0.sq.prec" = var(df$logppm), 
+            "nu.state.0.sq.inv" = 1,
+            "nu.source.0.sq.inv" = 1,
+            "nu.reason.0.sq.inv" = 1,
+            "nu.month.0.sq.inv" = 1,
+            "nu.year.0.sq.inv" = 1,
+            "identity" = diag(60), 
+            "zeros" = rep(0, 60), 
+            "nu.state.v0" = solve(diag(c(sapply(df %>% group_by(state) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+            "nu.year.v0" = solve(diag(c(sapply(df %>% group_by(year) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+            "nu.month.v0" = solve(diag(c(sapply(df %>% group_by(month) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+            "nu.source.v0" = solve(diag(c(sapply(df %>% group_by(source) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+            "nu.reason.v0" = reason_mat
+            )
+
+
+##### Initial values
+inits <- list(mu = mean(df$logppm),
+              beta1 = 0.0,
+              beta.state = rep(0, length(unique(levels(df$state)))),
+              beta.month = rep(0, length(unique(levels(df$month)))),
+              beta.source = rep(0, length(unique(levels(df$source)))),
+              beta.reason = rep(0, length(unique(levels(df$Primary_Reason)))),
+              beta.year = rep(0, length(unique(levels(df$year)))),
+              nu.state.v = solve(diag(c(sapply(df %>% group_by(state) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+              nu.year.v = solve(diag(c(sapply(df %>% group_by(year) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+              nu.month.v = solve(diag(c(sapply(df %>% group_by(month) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+              nu.source.v = solve(diag(c(sapply(df %>% group_by(source) %>% summarise(v = var(logppm)) %>% select(v), as.numeric)))),
+              nu.reason.v = reason_mat, 
+              sigma.sq = 0.5,
+              gamma.bulk.sq = 0.1
+              )
+```
+
+## JAGS Model
+```{r}
+cat("model
+    {
+      # Sampling Model
+      for ( i in 1:N) {
+        ppm[i] ~ dnorm(mu + beta1*mgstr[i] +beta2*bulk_ind[i] + beta.state[state[i]] + beta.source[source[i]] + beta.reason[reason[i]] + beta.month[month[i]] + beta.year[year[i]], sigma.sq + gamma.bulk.sq*bulk_ind[i])
+      }
+
+      ### Priors
+      #### (Essentially) Fixed Effects
+
+      mu ~ dnorm(mu0, delta0.sq.prec)
+      beta1 ~ dnorm(0, 0.0001)
+      beta2 ~ dnorm(0, 0.0001)
+      sigma.sq ~ dgamma(0.001, 0.001)
+      gamma.bulk.sq ~ dgamma(0.001, 0.001)
+
+      #### Random Effects (mean)
+
+      beta.state ~ dmnorm(zeros[1:n_state], nu.state.v[,])
+      beta.source ~ dmnorm(zeros[1:n_source], nu.source.v[,])
+      beta.reason ~ dmnorm(zeros[1:n_reason], nu.reason.v[,])
+      beta.month ~ dmnorm(zeros[1:n_month], nu.month.v[,])
+      beta.year ~ dmnorm(zeros[1:n_year], nu.year.v[,])
+
+      #### Heterogeneous group variances (parametrize the wishart using inverses (since matrices are diagonal anyways) to avoid costly matrix inversion)
+      nu.state.v ~ dwish(nu.state.0.sq.inv * nu.state.v0, n_state)
+      nu.source.v ~ dwish(nu.source.0.sq.inv * nu.source.v0, n_source)
+      nu.reason.v ~ dwish(nu.reason.0.sq.inv * nu.reason.v0, n_reason)
+      nu.month.v ~ dwish(nu.month.0.sq.inv * nu.month.v0, n_month)
+      nu.year.v ~ dwish(nu.year.0.sq.inv * nu.year.v0, n_year)
+
+        }", file="jagsModel.txt")
+```
+
+## JAGS Run
+```{r}
+
+model <- jags.model(file = "jagsModel.txt", data=dat, inits=inits, n.chains=1, n.adapt=500 )
+params <- c("mu", "beta1", "beta2", "beta.year", "beta.state", "beta.month", "beta.source", "beta.reason", "nu.state.v", "nu.source.v", "nu.reason.v", "nu.month.v", "nu.year.v", "sigma.sq", "gamma.bulk.sq")
+S = 5000
+samples <- coda.samples(model, params, n.iter=S)
+```
+
+## Analyze JAGS Results
+```{r}
+## summarize posterior samples
+summary(samples)
+```
+
+```{r}
+ss<-samples[[1]]
+```
+
+```{r}
+beta.month <- ss[,1:12]
+beta.reason <- ss[,13:24]
+beta.source <- ss[,25:29]
+beta.state <- ss[,30:83]
+beta.year <- ss[,84:95]
+beta.1 <- ss[,96]
+beta.2 <- ss[,97]
+gamma.bulk.sq <- ss[,98]
+mu<-ss[,99]
+
+reshapeVar<-function(df, size) {
+  returndf<-NULL
+  for (i in 1:dim(df)[1]){
+    returndf<-rbind(returndf, diag(matrix(df[i,], nrow = size)))  
+  }
+  returndf
+}
+
+var.month <- reshapeVar(ss[,100:(100+12*12-1)], 12)
+var.reason <- reshapeVar(ss[,244:(244+12*12-1)], 12)
+var.source <- reshapeVar(ss[, 388:(388+5*5-1)], 5)
+var.state <- reshapeVar(ss[, 413:(413+54*54-1)], 54)
+var.year <- reshapeVar(ss[, 3329:3472], 12) 
+sigma.sq <- ss[,3473]
+
+```
+
+
+```{r}
+pdf("posterior-dens.pdf")
+#### Plot posterior densities for the three scalar params
+
+par(mfrow=c(1,4),mar=c(2.75,2.75,.5,.5),mgp=c(1.7,.7,0))
+plot(density(mu,adj=2),xlab=expression(mu),main="",lwd=2,
+ylab=expression(paste(italic("p("),mu,"|",italic(y[1]),"...",italic(y[m]),")")))
+abline( v=quantile(mu,c(.025,.5,.975)),col="gray",lty=c(3,2,3) )
+plot(density(beta.1,adj=2),xlab=expression(beta1),main="", lwd=2,
+ylab=expression(paste(italic("p("), beta1,"|",italic(y[1]),"...",italic(y[m]),")")))
+abline( v=quantile(beta.1,c(.025,.5,.975)),col="gray",lty=c(3,2,3) )
+plot(density(beta.2,adj=2),xlab=expression(beta2),main="", lwd=2,
+ylab=expression(paste(italic("p("),beta2,"|",italic(y[1]),"...",italic(y[m]),")")))
+abline( v=quantile(beta.1,c(.025,.5,.975)),col="gray",lty=c(3,2,3) )
+dev.off()
+```
+
+
+```{r}
+
+# use coda for posterior intervals
+library(coda)
+library(bayesplot)
+
+# HPD intervals for month
+theta.mcmc <- beta.month
+theta.coda<-mcmc(theta.mcmc)
+df.mcmc<-as.data.frame(HPDinterval(theta.coda))
+post.mean <- apply(theta.mcmc, 2, mean)
+df.mcmc<-df.mcmc %>% mutate(mean = post.mean, index = 1:12)
+ggplot(df.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Group Effects by Month")
+ggsave("posterior_month.pdf")
+# HPD intervals for state
+sigma.mcmc <- beta.state
+sigma.coda<-mcmc(sigma.mcmc)
+dfs.mcmc<-as.data.frame(HPDinterval(sigma.coda))
+post.mean <- apply(sigma.mcmc, 2, mean)
+dfs.mcmc<-dfs.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$state))))
+ggplot(dfs.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Group Effects by State")
+ggsave("posterior_state.pdf")
+
+# HPD intervals for source
+sigma.mcmc <- beta.source
+sigma.coda<-mcmc(sigma.mcmc)
+dfs.mcmc<-as.data.frame(HPDinterval(sigma.coda))
+post.mean <- apply(sigma.mcmc, 2, mean)
+dfs.mcmc<-dfs.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$source))))
+ggplot(dfs.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Group Effects by Source")
+ggsave("posterior_source.pdf")
+
+# HPD intervals for reason
+sigma.mcmc <- beta.reason
+sigma.coda<-mcmc(sigma.mcmc)
+dfs.mcmc<-as.data.frame(HPDinterval(sigma.coda))
+post.mean <- apply(sigma.mcmc, 2, mean)
+dfs.mcmc<-dfs.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$Primary_Reason))))
+ggplot(dfs.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Group Effects by Reason")
+ggsave("posterior_reason.pdf")
+
+# HPD intervals for year
+sigma.mcmc <- beta.year
+sigma.coda<-mcmc(sigma.mcmc)
+dfs.mcmc<-as.data.frame(HPDinterval(sigma.coda))
+post.mean <- apply(sigma.mcmc, 2, mean)
+dfs.mcmc<-dfs.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$year))))
+ggplot(dfs.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Group Effects by Year")
+ggsave("posterior_year.pdf")
+```
+
+
+
+```{r}
+# HPD intervals for month
+theta.mcmc <- var.month
+theta.coda<-mcmc(theta.mcmc)
+df.mcmc<-as.data.frame(HPDinterval(theta.coda))
+post.mean <- apply(theta.mcmc, 2, mean)
+df.mcmc<-df.mcmc %>% mutate(mean = post.mean, index = 1:12)
+ggplot(df.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Variance of Group Effects by Month")
+ggsave("posterior_var_month.pdf")
+
+# HPD intervals for state
+theta.mcmc <- var.state
+theta.coda<-mcmc(theta.mcmc)
+df.mcmc<-as.data.frame(HPDinterval(theta.coda))
+post.mean <- apply(theta.mcmc, 2, mean)
+df.mcmc<-df.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$state))))
+ggplot(df.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Variance of Group Effects by State")
+ggsave("posterior_var_state.pdf")
+
+# HPD intervals for source
+theta.mcmc <- var.source
+theta.coda<-mcmc(theta.mcmc)
+df.mcmc<-as.data.frame(HPDinterval(theta.coda))
+post.mean <- apply(theta.mcmc, 2, mean)
+df.mcmc<-df.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$source))))
+ggplot(df.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Variance of Group Effects by Source")
+ggsave("posterior_var_source.pdf")
+
+# HPD intervals for reason
+theta.mcmc <- var.reason
+theta.coda<-mcmc(theta.mcmc)
+df.mcmc<-as.data.frame(HPDinterval(theta.coda))
+post.mean <- apply(theta.mcmc, 2, mean)
+df.mcmc<-df.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$Primary_Reason))))
+ggplot(df.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Variance of Group Effects by reason")
+ggsave("posterior_var_reason.pdf")
+
+# HPD intervals for year
+theta.mcmc <- var.year
+theta.coda<-mcmc(theta.mcmc)
+df.mcmc<-as.data.frame(HPDinterval(theta.coda))
+post.mean <- apply(theta.mcmc, 2, mean)
+df.mcmc<-df.mcmc %>% mutate(mean = post.mean, index = c(levels(unique(df$year))))
+ggplot(df.mcmc, aes(x=index, y=mean)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper)) +  theme(axis.text.x = element_text(angle = 90)) + ggtitle("Variance of Group Effects by Year")
+ggsave("posterior_var_year.pdf")
+
+```
+
+```{r}
+# Perform Posterior predictive checks
+SS = 3
+
+
+beta.month.ppc <- as.matrix(beta.month)[(S-SS + 1):S, ]
+beta.reason.ppc <- as.matrix(beta.reason)[(S-SS + 1):S, ]
+beta.source.ppc <- as.matrix(beta.source)[(S-SS + 1):S, ]
+beta.state.ppc <- as.matrix(beta.state)[(S-SS + 1):S, ]
+beta.year.ppc <- as.matrix(beta.year)[(S-SS + 1):S, ]
+beta.1.ppc <- as.numeric(beta.1)[(S-SS + 1):S]
+beta.2.ppc <- as.numeric(beta.2)[(S-SS + 1):S]
+mu.ppc<-as.numeric(mu)[(S-SS + 1):S]
+sigma.sq.ppc<-as.numeric(sigma.sq)[(S-SS + 1):S]
+gamma.bulk.sq.ppc<-as.numeric(gamma.bulk.sq)[(S-SS + 1):S]
+
+reshapeVarNonDiag<-function(df, size) {
+  returndf<-NULL
+  for (i in 1:dim(df)[1]){
+    returndf<-rbind(returndf, matrix(df[i,], nrow = size))
+  }
+  returndf
+}
+
+var.month.ppc <- reshapeVarNonDiag(ss[(S-SS + 1):S,99:(99+12*12-1)], 12)
+var.reason.ppc <- reshapeVarNonDiag(ss[(S-SS + 1):S,243:(243+12*12-1)], 12)
+var.source.ppc <- reshapeVarNonDiag(ss[(S-SS + 1):S, 387:(387+5*5-1)], 5)
+var.state.ppc <- reshapeVarNonDiag(ss[(S-SS + 1):S, 412:(412+54*54-1)], 54)
+var.year.ppc <- reshapeVarNonDiag(ss[(S-SS + 1):S, 3328:3471], 12) 
+
+num.of.data <- dim(df)[1]
+y.pred <- matrix(rep(0, SS*num.of.data), nrow = SS)
+dff <- df %>% mutate(state = as.numeric(state), month = as.numeric(month), year = as.numeric(year), source = as.numeric(source), Primary_Reason = as.numeric(Primary_Reason))
+
+for (i in 1:SS){
+  for (q in 1:num.of.data){
+    dd <- dff[q,]
+    indBulk <- as.numeric(dd$bulk_purchase)
+    x<-dd$mgstr
+    y.pred[i,q] = rnorm(1, mu.ppc[i] + beta.1.ppc[i]*x + beta.2.ppc[i]*indBulk+ beta.month.ppc[i, dd$month]+ beta.year.ppc[i, dd$year]+ beta.source.ppc[i, dd$source]+ beta.reason.ppc[i, dd$Primary_Reason]+ beta.state.ppc[i, dd$state] , sqrt(sigma.sq.ppc[i] + gamma.bulk.sq.ppc[i] *indBulk))
+  }
+}
+pdf("ppc.pdf")
+ppc_boxplot(as.numeric(df$logppm), y.pred)
+dev.off()
+```
+
+
