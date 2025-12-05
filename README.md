@@ -1,4 +1,8 @@
 # Observational-public-health-surveillance-study
+
+Thank you for letting me know and for putting together the sensitivity analysis. I’ve actually already finalized the report and sent it in for review, so I won’t be able to add anything new at this point. But please go ahead and share it when you can — I’d still like to understand your findings, and we can keep them in mind for future updates.
+
+Thanks again for your help.
  Investigation on amphetamines
  ## Introduction
 Central nervous system stimulants, such as amphetamines, have seen widespreaduse over the past century, for legal and illegal purposes. A substantial portion of am-phetamine transactions are carried out in the "black market", hence it is important tostudy their spatial and temporal trends, both for public health and law enforcementpurposes. This repo investigated factors that affect the price (per mg) ofthe drug amphetamines based on a dataset taken from the website StreetRx.com. They gathers user-submitted information on street prices of diverted prescription or illicitdrugs.
