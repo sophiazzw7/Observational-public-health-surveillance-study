@@ -2,14 +2,11 @@
  Investigation on amphetamines
 
  Here is a polished, polite email you can send to his senior manager. Tone is respectful, concise, and appropriate for someone senior:
+Hi [Boss Name],
 
-Hi [Name],
+Forwarding the meeting invite they set up. I had initially agreed during the call to provide the Excel, so they scheduled this follow-up. I’ve already replied to let them know that all next steps should be deferred to you.
 
-Thanks for sending the file. I touched base with my manager after the meeting, and he asked that any follow-ups or materials for this request be routed through him. He will take it from here.
-
-Please feel free to coordinate directly with him on next steps.
-
-Best,
+Thanks,
 Phoebe
 If you want it to sound more formal, more concise, or include a brief project description, I can adjust it.
 
