@@ -7,15 +7,14 @@ Subject: Question on legacy model review and closure
 
 Hi [Boss Name],
 
-I realized after we closed the validation on Monday that this new model is replacing the previous one, and the AR for the old model is still open.
+Now that we have completed the validation for the new model, I wanted to check on the appropriate approach for the legacy model, since its AR remains open.
 
-Would it be more appropriate to cancel the review for the legacy model, or proceed using the same validation report (with any needed clarification) and then request closure of the old AR?
+Would you prefer that we cancel the review for the legacy model, or proceed with the existing validation report and then request closure of the old AR?
 
-Happy to handle next steps once I know your preference.
+I’m happy to move forward once I have your direction.
 
 Thanks,
 Phoebe
-
 
 # Introduction
 Central nervous system stimulants, such as amphetamines, have seen widespreaduse over the past century, for legal and illegal purposes. A substantial portion of am-phetamine transactions are carried out in the "black market", hence it is important tostudy their spatial and temporal trends, both for public health and law enforcementpurposes. This repo investigated factors that affect the price (per mg) ofthe drug amphetamines based on a dataset taken from the website StreetRx.com. They gathers user-submitted information on street prices of diverted prescription or illicitdrugs.
