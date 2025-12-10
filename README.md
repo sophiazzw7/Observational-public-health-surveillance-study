@@ -1,14 +1,20 @@
 # Observational-public-health-surveillance-study
  Investigation on amphetamines
 
- Here is a polished, polite email you can send to his senior manager. Tone is respectful, concise, and appropriate for someone senior:
+Here’s a clean email you can send:
+
+Subject: Question on legacy model review and closure
+
 Hi [Boss Name],
 
-Forwarding the meeting invite they set up. I had initially agreed during the call to provide the Excel, so they scheduled this follow-up. I’ve already replied to let them know that all next steps should be deferred to you.
+I realized after we closed the validation on Monday that this new model is replacing the previous one, and the AR for the old model is still open.
+
+Would it be more appropriate to cancel the review for the legacy model, or proceed using the same validation report (with any needed clarification) and then request closure of the old AR?
+
+Happy to handle next steps once I know your preference.
 
 Thanks,
 Phoebe
-If you want it to sound more formal, more concise, or include a brief project description, I can adjust it.
 
 
 # Introduction
