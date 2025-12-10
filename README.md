@@ -19,8 +19,9 @@ I hope you’re doing well. I heard about your promotion—congratulations! It�
 
 Jane mentioned that you will be the point of contact for AH4950 going forward, so I wanted to reach out directly as we wrap up the current review. We are planning to raise two items for developer follow-up:
 
-1. additional support for the updated performance thresholds, and
-2. the model calibration or redevelopment plan given the model’s age.
+Thresholds were revised using only recent OGM results without assessing whether the decline reflects volatility, population changes, or model degradation. Please provide supporting analysis to justify the updated thresholds.
+
+Given the model’s age, MRO is requesting the model calibration plan or the redevelopment schedule. Mike had briefly discussed a tentative redevelopment date with me before he retired, but there is no formal plan documented yet.
 
 Mike had briefly discussed a tentative redevelopment date with me before he retired, but there is no formal plan documented yet. I’ll share the full details once the report is finalized, but I wanted to flag these items early so we stay aligned.
 
