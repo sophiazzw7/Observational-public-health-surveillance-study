@@ -5,15 +5,23 @@ Here’s a clean email you can send:
 
 Subject: Question on legacy model review and closure
 
-Hi [Boss Name],
+ubject: Congratulations and AH4950 Review Items
 
-Now that we have completed the validation for the new model, I wanted to check on the appropriate approach for the legacy model, since its AR remains open.
+Hi Susan,
 
-Would you prefer that we cancel the review for the legacy model, or proceed with the existing validation report and then request closure of the old AR?
+I hope you’re doing well. I heard about your promotion—congratulations! It’s truly well deserved.
 
-I’m happy to move forward once I have your direction.
+Jane mentioned that you will be the point of contact for AH4950 going forward, so I wanted to reach out directly as we wrap up the current review. We are planning to raise two items for developer follow-up:
 
-Thanks,
+additional support for the updated performance thresholds, and
+
+the model calibration or redevelopment plan given the model’s age.
+
+I’ll share the details once the report is finalized, but I wanted to flag these items early and make sure we stay aligned.
+
+Thanks again, and congratulations on your new role.
+
+Best regards,
 Phoebe
 
 # Introduction
