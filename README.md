@@ -7,22 +7,28 @@ Subject: Question on legacy model review and closure
 
 ubject: Congratulations and AH4950 Review Items
 
+Here is the updated version with your added point—still concise and professional:
+
+---
+
+**Subject: Congratulations and AH4950 Review Items**
+
 Hi Susan,
 
 I hope you’re doing well. I heard about your promotion—congratulations! It’s truly well deserved.
 
 Jane mentioned that you will be the point of contact for AH4950 going forward, so I wanted to reach out directly as we wrap up the current review. We are planning to raise two items for developer follow-up:
 
-additional support for the updated performance thresholds, and
+1. additional support for the updated performance thresholds, and
+2. the model calibration or redevelopment plan given the model’s age.
 
-the model calibration or redevelopment plan given the model’s age.
-
-I’ll share the details once the report is finalized, but I wanted to flag these items early and make sure we stay aligned.
+Mike had briefly discussed a tentative redevelopment date with me before he retired, but there is no formal plan documented yet. I’ll share the full details once the report is finalized, but I wanted to flag these items early so we stay aligned.
 
 Thanks again, and congratulations on your new role.
 
 Best regards,
 Phoebe
+
 
 # Introduction
 Central nervous system stimulants, such as amphetamines, have seen widespreaduse over the past century, for legal and illegal purposes. A substantial portion of am-phetamine transactions are carried out in the "black market", hence it is important tostudy their spatial and temporal trends, both for public health and law enforcementpurposes. This repo investigated factors that affect the price (per mg) ofthe drug amphetamines based on a dataset taken from the website StreetRx.com. They gathers user-submitted information on street prices of diverted prescription or illicitdrugs.
