@@ -1,25 +1,7 @@
 # Observational-public-health-surveillance-study
  Investigation on amphetamines
 
-Here’s a clean email you can send:
-
-Subject: Question on legacy model review and closure
-
-ubject: Congratulations and AH4950 Review Items
-
-Here is the updated version with your added point—still concise and professional:
-
----
-
-**Subject: Congratulations and AH4950 Review Items**
-
-Hi Susan,
-
-I hope you’re doing well. I heard about your promotion—congratulations! It’s truly well deserved.
-
-Jane mentioned that you will be the point of contact for AH4950 going forward, so I wanted to reach out directly as we wrap up the current review. We are planning to raise two items for developer follow-up:
-
-Thresholds were revised using only recent OGM results without assessing whether the decline reflects volatility, population changes, or model degradation. Please provide supporting analysis to justify the updated thresholds.
+HI looked into the initial FSV for AH4950 and confirmed that BDFS scores range from 101–754. Since Equifax discontinued BDFS, its white paper isn’t available online. During our 1-1, the score range you saw was most likely from the Commercial Insight Delinquency Score instead, which ranges from 397–695.
 
 Given the model’s age, MRO is requesting the model calibration plan or the redevelopment schedule. Mike had briefly discussed a tentative redevelopment date with me before he retired, but there is no formal plan documented yet.
 
