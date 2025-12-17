@@ -1,0 +1,77 @@
+Data Scope
+MRO critically assessed the scope of data used for the 2024Q4 OGM performance review based on the ETL process, reporting code, and clarifications provided by model developers. The review focused on identifying which datasets represent delivered ETL outputs that directly support OGM performance monitoring, versus datasets that serve auxiliary or intermediate purposes.
+Based on the ETL design and developer confirmation, the datasets bdfs_am_final_summary_202412, f_app_score_flat, and intime_sample_30jun2015 represent the delivered outputs of the ETL run. These datasets serve as inputs to downstream reporting processes, including performance testing, discrimination metrics, and PSI. Among these, bdfs_am_final_summary_202412 is used to generate performance results for OGM, f_app_score_flat is used for current-population PSI, and intime_sample_30jun2015 is used solely as the in-time PSI baseline.
+MRO conducted an independent review of the sample composition within bdfs_am_final_summary_202412 and identified that the vintage year distribution is heavily concentrated in 2023, with only a limited number of observations from 2022. MRO raised this observation to the developers to confirm whether the 2022 vintage data was complete. The developer confirmed that the 2022 vintage data contained in bdfs_am_final_summary_202412 is only partially available and does not represent a full vintage population, which is attributable to the model’s implementation timing and upstream system changes.
+Based on this clarification, the developer confirmed that the data used for the 2024Q4 OGM performance review should be restricted to vintage_yr = 2023. MRO therefore scoped its performance testing accordingly and did not treat the observed disproportion between 2023 and 2022 vintages as a data defect for the purposes of the 2024Q4 OGM cycle.
+The dataset bdfs_local_fit was also reviewed at a structural level but was not included in independent data testing. Based on ETL logic and developer explanation, this dataset contains model fit outputs and parameter mappings used internally by reporting code and does not represent delivered performance or monitoring data. As such, it does not directly support OGM performance testing for 2024Q4 and was excluded from testing scope.
+
+Data Quality Testing Results
+
+bdfs_am_final_summary_202412
+
+MRO independently tested the dataset bdfs_am_final_summary_202412, which represents the delivered ETL output for the 202412 reporting cycle. The dataset contains both INTIME records and CURRENT records spanning multiple vintage years. Data quality testing was performed in two stages: first, an assessment of the full delivered dataset to evaluate structural integrity and ETL consistency; second, focused testing on the subset of records relevant to the 2024Q4 OGM performance evaluation.
+
+Full Delivered Dataset Assessment
+
+MRO evaluated overall record counts and key identifiers on the full delivered dataset. The dataset contains 1,080,095 total records representing approximately 348,000 unique companies. Record counts were internally consistent across reviewed extracts, and no unexpected record inflation or truncation was observed. Unique identifier fields were populated for all reviewed records, and no missing unique identifiers were identified.
+
+MRO reviewed sample composition and vintage tagging across the full dataset. Approximately 97.9 percent of records are classified as CURRENT, and 2.1 percent are classified as INTIME. Vintage year values include 2015, 2022, and 2023, which is consistent with the ETL design that retains INTIME data for reference and includes multiple vintages in the delivered output. No inconsistencies were identified in sample type or vintage year labeling at the dataset level.
+
+MRO evaluated duplicate records on the full delivered dataset using multiple key definitions. Duplicate testing at the unique identifier and reporting-period level identified no exact duplicates. When evaluated using broader business-level key combinations, MRO identified records sharing the same business key with differing score values. These observations were communicated to the model developer, who confirmed that the same company identifier may appear across multiple upstream data sources, resulting in distinct records with independently generated scores. These observations reflect expected ETL behavior.
+
+MRO also evaluated missingness on the full delivered dataset. A small number of records were observed to have missing score values, representing a negligible proportion of total records. No missing values were identified for key identifier fields.
+
+2024Q4 OGM Population Assessment
+
+Consistent with OGM reporting requirements and developer guidance, MRO scoped performance-related data quality testing to records identified as CURRENT with vintage_yr = 2023, which represent the 2024Q4 OGM population. Earlier vintages present in the delivered dataset were confirmed to be only partially available and were therefore excluded from performance evaluation. All results described below reflect this 2024Q4 OGM population.
+
+MRO evaluated record counts and key identifiers for the 2024Q4 OGM population. The population contains 944,586 records associated with 326,664 unique companies. All records contain populated unique identifier values, and record counts were internally consistent across reviewed outputs. No unexpected record truncation was identified when restricting to the CURRENT, vintage_yr = 2023 population.
+
+MRO conducted duplicate testing on the 2024Q4 OGM population using the combination of sample_tp, vintage_yr, and unique_id. While duplicates were observed in the delivered dataset under this key definition, review of the 2024Q4 OGM population did not identify instances in which the same unique_id carried multiple differing score values for the same observation.
+
+MRO evaluated missingness and ranges for key analytical variables used in downstream OGM reporting. The score_value and weight variables contained no missing values in the 2024Q4 OGM population. No negative score values were observed. The weight variable exhibited uniform values of 1.0 across all records.
+
+MRO assessed score ranges and distributions for the 2024Q4 OGM population. Observed score values ranged from 0 to 670, with a median of 537 and a mean of 521.74. Quartile values and visual review of the score distribution did not identify anomalous clustering, implausible values, or scaling issues. Although a small number of observations contained score_value equal to 0, these records are excluded from downstream OGM performance analysis through an inner join to the BDFS calibration table, which only includes valid BDFS score values starting at 101. As a result, non-valid score values do not enter accuracy, discrimination, or stability calculations.
+
+MRO evaluated outcome variables used in performance testing, including BAD_AT_0MO, BAD_AT_3MO, BAD_AT_6MO, BAD_AT_9MO, BAD_AT_12MO, and EVER_BAD. All outcome variables were binary and populated consistently. Event rates increased monotonically with longer performance horizons, and correlation testing showed increasing Pearson correlation coefficients across horizons.
+
+MRO reviewed coverage across line-of-business indicators within the 2024Q4 OGM population. Records were distributed across TRUI, hBBT, and hSTI categories. All line-of-business segments were represented.
+
+MRO evaluated date fields to confirm alignment with the 2024Q4 monitoring window. Start dates ranged from 31OCT2022 to 31DEC2023, and the reporting date for all records was 31DEC2024. Observed date ranges were consistent with the defined 2024Q4 OGM evaluation period.
+
+f_app_score_flat
+MRO independently tested the dataset f_app_score_flat because it serves as the upstream score source used to construct CURRENT monitoring samples for discrimination and stability analysis. Testing was explicitly scoped to variables used in downstream reporting and limited to the CURRENT population relevant to the 2024Q4 monitoring cycle.
+MRO evaluated record counts and confirmed that the number of records aligns with expectations for the CURRENT monitoring population. Unique identifier fields were populated for all reviewed records, and no missing unique identifiers were observed.
+MRO conducted duplicate testing on f_app_score_flat using unique identifier and effective date combinations. Testing confirmed that there are no exact duplicates at the unique identifier and effective date level. MRO further confirmed that no instances exist in which the same unique identifier and effective date combination carries multiple differing score values. These results indicate that the flat score dataset is internally consistent at the observation level.
+MRO assessed effective date ranges and confirmed that effective dates fall within expected bounds for the CURRENT monitoring population used in the 2024Q4 OGM cycle. No anomalous or implausible effective date values were observed.
+MRO evaluated score distributions and confirmed that score values fall within expected ranges. No structural breaks, unexpected clustering, or implausible score values were identified.
+MRO evaluated missing score values within f_app_score_flat. A limited number of CURRENT records were observed to have missing scores. These records represent a very small fraction of the total CURRENT population. MRO reviewed downstream PSI and reporting logic and confirmed that missing scores are explicitly categorized and tracked in stability analysis. Given the limited volume of missing values, MRO concluded that these observations do not materially impact PSI results for the 2024Q4 monitoring period.
+MRO assessed weight values within f_app_score_flat and confirmed that all CURRENT records carry uniform weight values. No anomalous or extreme weight observations were identified.
+MRO also reviewed score indicators and blended score labels used in downstream reporting. Observed categories and distributions were consistent with expectations for the CURRENT monitoring population, and no unexpected or invalid indicator values were identified.
+
+Conclusion
+Based on the independent testing performed, MRO concludes that bdfs_am_final_summary_202412 and f_app_score_flat are internally consistent and appropriate for use in the 2024Q4 OGM performance monitoring of model AH4950. All identified data characteristics, including vintage year concentration, limited missing values, and business-key–level score differences, were quantified, documented, and discussed with the model developer. These observations do not preclude use of the data for the current OGM cycle and are appropriately addressed within existing monitoring and governance processes.
+
+
+
+Here is a concise **Data Appropriateness Assessment** written in MRO style, grounded in the ETL process and the testing results you obtained, without inference or overstatement.
+
+---
+
+Data Appropriateness Assessment
+
+MRO assessed the appropriateness of the data used for the 2024Q4 OGM performance evaluation by reviewing the end-to-end ETL design, delivered datasets, downstream reporting logic, and results of independent data quality testing. The assessment focused on whether the data produced by the ETL process is suitable, complete for its intended purpose, and aligned with OGM monitoring requirements.
+
+The ETL process produces clearly defined delivered outputs that directly support OGM monitoring. The dataset bdfs_am_final_summary_202412 represents the finalized performance dataset used for OGM evaluation, while f_app_score_flat serves as the upstream flat score source used to construct CURRENT populations for discrimination and stability testing. The intime_sample_30jun2015 dataset is retained solely as an in-time reference population for PSI and does not enter performance testing. Other intermediate datasets, including bdfs_local_fit, contain model fit parameters or internal mappings and are not intended for performance monitoring. Excluding these intermediate datasets from data quality testing is therefore appropriate and consistent with their role in the ETL design.
+
+Independent testing confirmed that the delivered ETL outputs are structurally sound and internally consistent. Record counts, key identifiers, and date fields align with ETL filters and reporting logic, and no evidence of record truncation, inflation, or key-field incompleteness was identified. The presence of multiple vintages and INTIME records in the delivered dataset is consistent with ETL retention logic and does not indicate a data issue.
+
+Based on developer clarification, the 2022 vintage data included in the delivered dataset is only partially available and does not represent a complete performance population. The ETL and reporting process therefore explicitly scopes OGM performance evaluation to CURRENT records with vintage_yr = 2023 for the 2024Q4 cycle. MRO’s testing and conclusions were aligned with this intended scope. Restricting performance evaluation to the 2023 vintage is appropriate and consistent with both ETL design and OGM reporting practice.
+
+For the 2024Q4 OGM population, independent testing confirmed that key analytical variables used in downstream performance, discrimination, and stability analysis are complete and well-behaved. Score values fall within expected ranges and exhibit stable distributions. Outcome variables are populated consistently and behave as expected across performance horizons. Weight values are uniform and do not introduce distortion into monitoring metrics. Duplicate behavior observed at broader business-key levels reflects upstream sourcing and ETL design rather than data integrity issues and does not affect observation-level performance testing.
+
+The f_app_score_flat dataset was also found to be appropriate for its intended use. The dataset is internally consistent at the observation level, contains valid effective dates, and supports stable construction of CURRENT monitoring populations. Limited missing score observations are explicitly handled in downstream PSI logic and do not materially affect stability results for the 2024Q4 cycle.
+
+Based on the ETL design, developer confirmations, and independent data quality testing results, MRO concludes that the data used for the 2024Q4 OGM performance evaluation is appropriate for its intended purpose. The delivered datasets accurately reflect the defined monitoring population, are aligned with reporting logic, and support reliable performance, discrimination, and stability assessment for model AH4950.
+
+
