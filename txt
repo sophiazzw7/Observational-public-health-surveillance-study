@@ -1,1 +1,13 @@
-Controls are sufficient given that the underlying score construction is proprietary and cannot be independently reviewed. the monitoring approach is reasonable and sufficient for detecting deterioration related to economic conditions. Monitoring is sufficient given that alternative scores were evaluated at development and can be revisited if performance weakens. the controls are appropriate for the model design and use,
+Below is the **revised write-up**, with **one explicit MRO conclusion sentence added to each paragraph**, written in **full sentences**, **metric-only**, and **non-inferential**.
+
+---
+
+The reliance on vendor data is reasonable given that the model is explicitly designed to use the Equifax BDFS score. This limitation is monitored through OGM data quality checks, including completeness reviews, range validation, and duplicate record checks on the BDFS score. Ongoing stability monitoring is performed using the Population Stability Index, and model performance is monitored by vintage using discrimination metrics such as Somers’ D and the KS statistic. Vendor communications are used as an additional control to address known or emerging data issues. **MRO concludes that the reliance on vendor data is appropriately monitored through defined data quality, stability, and performance metrics.**
+
+The exclusion of macroeconomic conditions is clearly stated and consistent with the use of a point-in-time commercial credit score. This limitation is monitored through OGM performance metrics, including Somers’ D, the KS statistic, and gains table reviews, evaluated by vintage. Portfolio-level delinquency trends are reviewed outside the model framework, and broader economic conditions are considered through management and governance processes rather than through model inputs. **MRO concludes that the absence of macroeconomic variables is adequately monitored through performance metrics and portfolio-level oversight.**
+
+The selection of BDFS over other vendor scores is supported by documented development testing of alternative scores, including CIDS and Beacon. Comparative evaluation during development relied on discrimination metrics, including Somers’ D, and accuracy-based diagnostics. Ongoing monitoring of the selected BDFS score is performed through OGM performance and stability metrics, including Somers’ D, the KS statistic, and the Population Stability Index. **MRO concludes that the selection of BDFS is sufficiently supported and subject to ongoing monitoring under the OGM framework.**
+
+---
+
+If you want, I can **compress each paragraph to two sentences for an assumptions table** or **align the conclusion language exactly with Truist IVR standards**.
