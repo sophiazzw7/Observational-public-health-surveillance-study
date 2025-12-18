@@ -1,31 +1,1 @@
-Section 5.1 describes empirical screening of candidate vendor-provided scores, including BDFS, CIDS, and Beacon (FICO), using discrimination and calibration metrics. The documentation does not describe an external literature review.
-
-
-Model Purpose The AH4950 Small Business Bankcard Account Management Model uses Equifax-provided credit scores to predict the likelihood that an existing small business bankcard account will become severely delinquent, declare bankruptcy, or charge off within the next 12 months. The model supports small business bankcard line management and risk rating assignment.
-Dependent Variable Definition The dependent variable is defined as 90 days past due or worse, including bankruptcy or charge-off, measured over a 12-month performance window following the score date. This definition aligns with the Commercial Target PD scale used for assigning risk grades.
-Target Population The model applies to existing small business bankcard accounts in the Truist small business card portfolio. 
-Alternative Methodologies Considered During model development, Truist evaluated multiple independent variables, including the Equifax Business Delinquency Financial Score (BDFS), the Commercial Insight Delinquency Score (CIDS), and the Beacon (FICO) score, as well as selected score combinations. Based on screening using discrimination and calibration metrics, the BDFS-only approach was selected for implementation.
-
-
-The underlying variables and parameterization of the Equifax BDFS score are not available, as BDFS is a vendor-developed model.
-
-Segmentation
-The documentation describes testing of multiple segmentation strategies, including business size (larger versus smaller businesses), delinquency status at observation (dirty versus clean), and product segments (EZ App and Business Visa). Segmented BDFS-only models were evaluated, but no improvement over the overall BDFS model was observed, and segmentation was not adopted.
-
-
-The AH4950 Small Business Bankcard Account Management Model is a score-based model that uses the Equifax Business Delinquency Financial Score (BDFS) as a single vendor-provided input to estimate the likelihood of severe delinquency, bankruptcy, or charge-off within a 12-month performance window. The underlying construction and variables of the BDFS score are proprietary to Equifax and are not available to Truist.
-During development, multiple vendor scores, including BDFS, CIDS, and Beacon (FICO), were evaluated using discrimination and calibration metrics. Segmentation strategies by business size, delinquency status at observation, and product type were also tested; however, no segmented specification demonstrated improvement over the overall BDFS model, and segmentation was not adopted.
-The final specification is a BDFS-only model estimated using a local fit regression with extrapolation across the full score range, avoiding discretized score binning. Model parameters consist of an intercept and a coefficient on the BDFS score, which were estimated on the development sample and reported as statistically significant.
-
-
-Reliance on vendor data (BDFS)
-Vendor data reliance is monitored through OGM data quality controls that include checks for missing values, out-of-range values, and duplicate records for the BDFS AM Custom Score. Data stability is monitored using the Population Stability Index. Distributional reviews are performed through quarterly PSI visualizations. The model developer also performs period-over-period comparisons of OGM results to identify unexpected changes.
-
-Macroeconomic conditions not incorporated in the model
-The absence of macroeconomic variables is monitored through ongoing performance metrics, including Somers’ D, the KS statistic, and gains table reviews for bad rate reversals. Portfolio performance is also reviewed by vintage outside the model. Assumptions and limitations related to macroeconomic exclusion are reviewed annually as part of OGM reporting.
-
-Selection of BDFS based on familiarity and contractual availability
-The selection of BDFS is supported by documented development-stage comparative testing against alternative scores. Ongoing monitoring focuses on model performance and stability using Somers’ D, the KS statistic, and the Population Stability Index.
-
-No product segmentation implemented
-Product segmentation was not implemented because development-stage testing showed no improvement in model performance relative to the overall BDFS-only specification. Segmented testing evaluated the BDFS-only model separately on the EZ App and Business Visa populations and included estimation of model parameters and review of ROC curves and accuracy plots. Ongoing monitoring of this assumption is performed through OGM performance metrics, including Somers’ D, the KS statistic, and gains table reviews, with additional product-level monitoring conducted through Line of Business reporting.
+Controls are sufficient given that the underlying score construction is proprietary and cannot be independently reviewed. the monitoring approach is reasonable and sufficient for detecting deterioration related to economic conditions. Monitoring is sufficient given that alternative scores were evaluated at development and can be revisited if performance weakens. the controls are appropriate for the model design and use,
