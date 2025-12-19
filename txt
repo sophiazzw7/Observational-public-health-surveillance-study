@@ -1,13 +1,37 @@
-Below is the **revised write-up**, with **one explicit MRO conclusion sentence added to each paragraph**, written in **full sentences**, **metric-only**, and **non-inferential**.
 
----
+11.2 OGM Plan Assessment
+11.2.1 OGM Plan Granularity
+The OGM plan is designed in a manner consistent with the AH4950 model design and intended use. AH4950 produces a single vendor-provided score that is used for cutoff-based account management decisions. The monitoring framework evaluates performance at the score level using metrics that assess rank ordering, discrimination, and stability of the score distribution. The defined granularity aligns with how the model output is used in business processes.
 
-The reliance on vendor data is reasonable given that the model is explicitly designed to use the Equifax BDFS score. This limitation is monitored through OGM data quality checks, including completeness reviews, range validation, and duplicate record checks on the BDFS score. Ongoing stability monitoring is performed using the Population Stability Index, and model performance is monitored by vintage using discrimination metrics such as Somers’ D and the KS statistic. Vendor communications are used as an additional control to address known or emerging data issues. **MRO concludes that the reliance on vendor data is appropriately monitored through defined data quality, stability, and performance metrics.**
+11.2.2 Performance Tests and Monitoring Frequency
+The performance tests defined in the OGM plan evaluate whether the model continues to perform as intended for its stated use. Discrimination and rank-ordering tests assess the ability of the score to separate higher-risk and lower-risk accounts, which is the primary function of the model. Score stability testing evaluates whether the distribution of scores remains consistent with expectations over time.
+OGM reporting is conducted on an annual basis, which is consistent with the model’s tier classification and internal Model Risk Management requirements.
 
-The exclusion of macroeconomic conditions is clearly stated and consistent with the use of a point-in-time commercial credit score. This limitation is monitored through OGM performance metrics, including Somers’ D, the KS statistic, and gains table reviews, evaluated by vintage. Portfolio-level delinquency trends are reviewed outside the model framework, and broader economic conditions are considered through management and governance processes rather than through model inputs. **MRO concludes that the absence of macroeconomic variables is adequately monitored through performance metrics and portfolio-level oversight.**
+11.2.3 Performance Metrics and Thresholds
+The OGM plan defines a set of ongoing monitoring metrics that are clearly documented. Somers’ D and KS are used to evaluate discriminatory power of the score. Gains table analysis is used to assess whether rank ordering is preserved across score bands. PSI is used as an early warning indicator to monitor changes in the score distribution relative to the development baseline.
+Thresholds are defined for each metric and are used to identify potential performance concerns requiring further review. The plan explicitly distinguishes between performance metrics and early warning indicators, and PSI is excluded from the overall model performance rating. The defined metrics and thresholds align with the model’s score-based use.
 
-The selection of BDFS over other vendor scores is supported by documented development testing of alternative scores, including CIDS and Beacon. Comparative evaluation during development relied on discrimination metrics, including Somers’ D, and accuracy-based diagnostics. Ongoing monitoring of the selected BDFS score is performed through OGM performance and stability metrics, including Somers’ D, the KS statistic, and the Population Stability Index. **MRO concludes that the selection of BDFS is sufficiently supported and subject to ongoing monitoring under the OGM framework.**
+11.2.4 OGM Starting Date
+The OGM plan specifies the initial monitoring start date and defines an annual monitoring cadence. Monitoring has been performed on a recurring basis since implementation, consistent with the defined frequency.
 
----
+11.2.5 Model Limitations
+The OGM plan documents model limitations, including reliance on a single vendor score and the exclusion of macroeconomic variables from the model design. The plan specifies that these limitations are monitored through ongoing evaluation of discrimination metrics and review of portfolio performance trends outside the model framework. Limitations that cannot be directly assessed through OGM are explicitly identified.
 
-If you want, I can **compress each paragraph to two sentences for an assumptions table** or **align the conclusion language exactly with Truist IVR standards**.
+11.2.6 Model Use Limitation
+AH4950 does not define explicit model application boundaries beyond its documented business use. This section is noted as not applicable in the OGM plan.
+
+11.2.7 Escalation Plan
+The OGM plan includes a clearly defined escalation framework that outlines actions to be taken when monitoring thresholds are breached. The escalation process specifies notification requirements, governance forums, and timelines for review and remediation. Escalation actions differentiate between performance metric breaches and early warning indicator breaches and align with internal issue management procedures and Model Risk Management standards.
+
+
+
+
+11.2.3 Performance Metrics and Thresholds
+The OGM plan defines a set of ongoing monitoring metrics aligned with the AH4950 model’s design and intended use. The current OGM framework evaluates performance using Somers’ D, KS, gains table analysis, and PSI. These metrics assess the model’s ability to discriminate and rank-order risk and to monitor score distribution stability over time.
+Somers’ D and KS are used as primary discrimination metrics to evaluate separation between higher-risk and lower-risk accounts. Gains table analysis is used to assess preservation of rank ordering across score bands and to confirm monotonicity consistent with the model’s cutoff-based use. PSI is retained as an early warning indicator to monitor shifts in the score distribution relative to the development baseline and is explicitly excluded from the overall performance rating.
+The prior OGM framework included calibration accuracy metrics. Calibration accuracy was removed from the OGM plan because calibration was not implemented for AH4950. The Model Development Documentation describes that calibration was not performed due to model design considerations and limitations in aligning the vendor score to observed portfolio outcomes. As calibration is not part of the implemented methodology, exclusion of calibration accuracy from ongoing monitoring is consistent with the model design and avoids testing an element that is not operationally used.
+The OGM plan also reflects an update to performance thresholds. Historical thresholds were derived from the original development sample. The updated thresholds are based on more recent OGM periods. The developer documented that this update was made to reflect changes in portfolio characteristics and higher observed bad rates in the current Truist portfolio. MRO discussions with the developer confirmed that the threshold updates were intended to align monitoring expectations with recent portfolio performance rather than historical development conditions.
+MRO notes that while the revised metrics are appropriate for evaluating AH4950 performance and align with the model’s use, the threshold updates were implemented without a documented analysis assessing whether observed performance changes reflect model degradation, changes in portfolio risk, or other external factors. In addition, the OGM documentation does not include analysis of observed bad rate trends or a formal assessment of whether recalibration would be necessary prior to revising thresholds.
+As a result, MRO identifies a sub-issue related to the governance of threshold updates. While updating thresholds to reflect recent performance is reasonable within an OGM framework, additional analysis is needed to support the rationale for revising thresholds in lieu of alternative remediation actions, including evaluation of performance stability, portfolio risk changes, and the continued appropriateness of not implementing calibration.
+
+
