@@ -105,3 +105,28 @@ If you want, I can:
 * Split it into **“Results” vs “MRO Assessment”** subsections to match a specific template, or
 * Tighten the threshold discussion further to be maximally audit-defensive.
 
+
+Below is a **clean, self-contained MRO-style write-up** focused specifically on **OGM results since the last validation**, covering **metrics, threshold changes, and how results are assessed**, without re-arguing performance theory and without inference.
+
+---
+
+OGM Results Since Last Validation
+
+Since the most recent validation, model performance has been monitored through the OGM process, with results reported for 4Q2024 and 2Q2025. During this period, both performance metrics and the applicable monitoring thresholds changed.
+
+In 4Q2024, back-testing results showed a Somers’ D of 50.56 percent and an accuracy (MAD) of 1.15. Under the thresholds in effect at that time, both metrics breached the established performance criteria. Population stability remained satisfactory, with a PSI of 0.033, indicating that the score distribution was stable relative to the development baseline. The gains table for the evaluated vintage showed a generally monotonic pattern in observed bad rates across score bands, indicating preserved rank ordering despite the metric breaches.
+
+Following 4Q2024, the model developer updated the OGM performance thresholds. The developer noted that the original thresholds were derived from a 2015 hBBT sample characterized by very limited bad rates and a risk environment that differs from more recent portfolio conditions. Based on this rationale, revised thresholds were implemented for subsequent OGM periods.
+
+In 2Q2025, model performance was evaluated against the updated thresholds. Somers’ D increased to approximately 69 percent, representing an improvement relative to the 4Q2024 result. The KS statistic was reported at 56 percent, indicating meaningful separation between default and non-default populations. Population stability remained satisfactory, with PSI continuing to remain below the 0.10 threshold. The gains table showed no material bad-rate reversals across score bands, supporting continued acceptable rank ordering.
+
+From an MRO perspective, OGM results since the last validation indicate stable population characteristics and improvement in discrimination metrics over time. While performance results in 2Q2025 fall within the updated threshold ranges, MRO notes that performance conclusions are dependent on the revised thresholds implemented after 4Q2024. Accordingly, MRO raised a sub-issue requesting documented analytical support for the threshold changes, including analysis of bad-rate behavior and score-level performance across recent OGM periods. Until such support is provided, the observed performance improvement is acknowledged, while governance around threshold revisions remains subject to follow-up.
+
+---
+
+If you want, I can:
+
+* Shorten this to a **single IVR paragraph**, or
+* Split it into **“Results” vs “MRO Assessment”** subsections to match a specific template, or
+* Tighten the threshold discussion further to be maximally audit-defensive.
+
