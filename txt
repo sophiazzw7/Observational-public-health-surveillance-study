@@ -1,78 +1,79 @@
-Perfect — below is the **revised two-section version (Stability + Back-Testing)** with your **new requirement explicitly incorporated**, keeping **MRO strictly in an assessment role**, and clearly distinguishing **what the developer stated** versus **what is missing** from a governance standpoint.
+Of course. Below is the same write-up with all bold formatting removed, while keeping the content, structure, and MRO tone unchanged.
 
 ---
 
-## Stability Assessment
+Stability Assessment
 
 Stability was assessed using the Population Stability Index (PSI) in accordance with the OGM plan.
 
-For **4Q2024**, the reported PSI is **0.033**, which is below the inner threshold of **0.10**, indicating stable score distributions relative to the development baseline. The accompanying distribution plots show close alignment between the baseline and current score distributions.
+For 4Q2024, the reported PSI is 0.033, which is below the inner threshold of 0.10, indicating stable score distributions relative to the development baseline. The accompanying distribution plots show close alignment between the baseline and current score distributions.
 
-For **2Q2025**, the PSI remains low at approximately **0.04**, continuing to fall below the **0.10** threshold. PSI results are consistent across reporting periods.
+For 2Q2025, the PSI remains low at approximately 0.04, continuing to fall below the 0.10 threshold. PSI results are consistent across reporting periods.
 
-Based on these results, **population stability is assessed as satisfactory**, and changes in back-testing results are not attributable to population instability.
-
----
-
-## Back-Testing Assessment
-
-### Reported Results by Period
-
-**4Q2024**
-
-Back-testing results from **4Q2024** show:
-
-* **Somers’ D:** **50.56%**
-* **Accuracy (MAD):** **1.15**, exceeding the original accuracy threshold
-
-The model developer states that a **Somers’ D of 50.56% represents moderate discrimination** rather than low discriminatory power. The developer further notes that the **original OGM thresholds were derived from a 2015 hBBT sample**, where observed bad rates were very limited and reflect a risk environment that differs materially from more recent periods.
-
-**MRO agrees that the 4Q2024 Somers’ D level reflects moderate discrimination**, based on independent review of the accompanying diagnostics. The gains table for the **2023 vintage** shows a generally monotonic pattern in observed bad rates across score bands, indicating preserved rank ordering despite the metric breach under the original threshold framework. No material bad-rate reversals are observed.
-
-However, while the developer cites differences between the 2015 hBBT environment and recent portfolio behavior, **no quantitative analysis is provided in the OGM materials to explicitly demonstrate how changes in bad-rate levels or portfolio composition justify the original threshold being no longer appropriate**.
+Based on these results, population stability is assessed as satisfactory, and changes in back-testing results are not attributable to population instability.
 
 ---
 
-**2Q2025 (Evaluated Against Updated Thresholds)**
+Back-Testing Assessment
 
-For **2Q2025**, model performance is evaluated against **updated OGM thresholds established by the model developer**:
+Reported Results by Period
 
-* **Somers’ D:** approximately **69%**
-* **KS statistic:** **56%**
-* Gains table: **no bad-rate reversals observed**
+4Q2024
+
+Back-testing results from 4Q2024 show:
+
+Somers’ D of 50.56 percent.
+
+Accuracy (MAD) of 1.15, exceeding the original accuracy threshold.
+
+The model developer states that a Somers’ D of 50.56 percent represents moderate discrimination rather than low discriminatory power. The developer further notes that the original OGM thresholds were derived from a 2015 hBBT sample, where observed bad rates were very limited and reflect a risk environment that differs materially from more recent periods.
+
+MRO agrees that the 4Q2024 Somers’ D level reflects moderate discrimination based on independent review of the accompanying diagnostics. The gains table for the 2023 vintage shows a generally monotonic pattern in observed bad rates across score bands, indicating preserved rank ordering despite the metric breach under the original threshold framework. No material bad-rate reversals are observed.
+
+However, while the developer cites differences between the 2015 hBBT environment and recent portfolio behavior, no quantitative analysis is provided in the OGM materials to explicitly demonstrate how changes in bad-rate levels or portfolio composition justify the original threshold being no longer appropriate.
+
+---
+
+2Q2025 (Evaluated Against Updated Thresholds)
+
+For 2Q2025, model performance is evaluated against updated OGM thresholds established by the model developer:
+
+Somers’ D of approximately 69 percent.
+
+KS statistic of 56 percent.
+
+Gains table showing no bad-rate reversals.
 
 Relative to 4Q2024, discrimination metrics improve materially in 2Q2025.
 
 ---
 
-### Joint Interpretation and KS / Gains Table Evidence
+Joint Interpretation and KS / Gains Table Evidence
 
-The **KS statistic measures the maximum separation between the cumulative default and non-default distributions**. Review of the **2Q2025 KS graph** shows that the **maximum separation occurs at approximately the 500 score level**.
+The KS statistic measures the maximum separation between the cumulative default and non-default distributions. Review of the 2Q2025 KS graph shows that the maximum separation occurs at approximately the 500 score level.
 
-This observation is consistent with the **2Q2025 gains table**, which shows that:
+This observation is consistent with the 2Q2025 gains table, which shows that:
 
-* The **majority of observed bads occur in the lower score range**, approximately **101–518**
-* Bad rates decline as scores increase beyond this range
-* No material bad-rate reversals are present across score bands
+The majority of observed bads occur in the lower score range, approximately 101–518.
 
-The alignment between the KS curve and the gains table indicates that the model achieves its **strongest separation in the score ranges where defaults are most concentrated**, supporting the conclusion that the model continues to rank-order risk appropriately.
+Bad rates decline as scores increase beyond this range.
 
----
+No material reversals are present across score bands.
 
-### MRO Assessment and Governance Considerations
-
-From an MRO perspective, the **4Q2024 Somers’ D result reflects moderate discrimination**, as stated by the model developer, and **MRO concurs** based on independent review of the gains table, KS curve, and rank-ordering diagnostics. The **2Q2025 results show improvement relative to 4Q2024**, with stronger separation evidenced by higher Somers’ D and a KS statistic of **56%**.
-
-Taken together, these results indicate **acceptable and improving rank ordering**, and **MRO does not view the observed performance pattern as a major issue**.
-
-However, MRO notes that **2Q2025 results are evaluated against updated performance thresholds**, and that the developer has cited limitations of the original 2015 hBBT bad-rate environment as rationale for revising those thresholds. **MRO notes that supporting quantitative analysis demonstrating how differences in bad-rate behavior or portfolio characteristics justify the revised thresholds was not provided in the OGM materials**.
-
-Accordingly, **MRO raises a sub-issue requesting documented analytical support for the threshold revisions**, including investigation of **bad-rate distributions, score-level performance, and underlying portfolio characteristics across recent OGM periods**, to ensure that threshold changes are appropriately supported and governed.
+The alignment between the KS curve and the gains table indicates that the model achieves its strongest separation in the score ranges where defaults are most concentrated, supporting the conclusion that the model continues to rank-order risk appropriately.
 
 ---
 
-If you want, I can now:
+MRO Assessment and Governance Considerations
 
-* Tighten the governance paragraph further to be **very audit-defensive**, or
-* Extract the **sub-issue text exactly as it should appear in SNOW**, or
-* Shorten this into a **single “Back-Testing & Stability” IVR subsection** without losing substance.
+From an MRO perspective, the 4Q2024 Somers’ D result reflects moderate discrimination, as stated by the model developer, and MRO concurs based on independent review of the gains table, KS curve, and rank-ordering diagnostics. The 2Q2025 results show improvement relative to 4Q2024, with stronger separation evidenced by higher Somers’ D and a KS statistic of 56 percent.
+
+Taken together, these results indicate acceptable and improving rank ordering, and MRO does not view the observed performance pattern as a major issue.
+
+However, MRO notes that 2Q2025 results are evaluated against updated performance thresholds, and that the developer has cited limitations of the original 2015 hBBT bad-rate environment as rationale for revising those thresholds. MRO notes that supporting quantitative analysis demonstrating how differences in bad-rate behavior or portfolio characteristics justify the revised thresholds was not provided in the OGM materials.
+
+Accordingly, MRO raises a sub-issue requesting documented analytical support for the threshold revisions, including investigation of bad-rate distributions, score-level performance, and underlying portfolio characteristics across recent OGM periods, to ensure that threshold changes are appropriately supported and governed.
+
+---
+
+If you want, I can now convert this directly into final IVR language, extract just the SNOW sub-issue text, or shorten this further without losing governance clarity.
