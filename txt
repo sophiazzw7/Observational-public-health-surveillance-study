@@ -1,1 +1,1 @@
-Performance thresholds were revised following repeated metric breaches across recent OGM periods; however, quantitative analysis supporting the appropriateness of the revised thresholds was not provided. MRO requests documented justification to ensure the threshold changes are appropriately governed.
+Hope you’re doing well. As I was getting familiar with the RAC LGD LSV, I noticed that the planned end date is currently set one day after the planned start date. I just wanted to check whether that timing is intentional, or if I should expect it to be updated later.
