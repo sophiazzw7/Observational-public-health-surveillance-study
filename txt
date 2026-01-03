@@ -1,1 +1,92 @@
-Hope you’re doing well. As I was getting familiar with the RAC LGD LSV, I noticed that the planned end date is currently set one day after the planned start date. I just wanted to check whether that timing is intentional, or if I should expect it to be updated later.
+import pandas as pd
+import numpy as np
+
+# Assumes 2024Q2 OGM dataframe is already loaded as df
+# Focus only on: SCORE, LOANPURPOSECATEGORY, TARGET, SCORE_DATE, APPID
+
+cols_wanted = ["SCORE", "LOANPURPOSECATEGORY", "TARGET", "SCORE_DATE", "APPID"]
+cols = [c for c in cols_wanted if c in df.columns]
+dq = df[cols].copy()
+
+print("Using columns:", cols)
+print("Rows:", len(dq))
+
+# -----------------------
+# 1) Missingness summary
+# -----------------------
+missing = pd.DataFrame({
+    "dtype": dq.dtypes.astype(str),
+    "missing_n": dq.isna().sum(),
+    "missing_pct": (dq.isna().mean() * 100).round(3),
+    "nunique": dq.nunique(dropna=True)
+}).sort_values("missing_pct", ascending=False)
+
+print("\n=== Missingness summary ===")
+print(missing)
+
+# -----------------------
+# 2) Duplicate APPID (if present)
+# -----------------------
+if "APPID" in dq.columns:
+    dup_mask = dq.duplicated(subset=["APPID"], keep=False)
+    print("\n=== Duplicate APPID check ===")
+    print("Duplicate rows:", int(dup_mask.sum()))
+    print("Duplicate pct:", round(float(dup_mask.mean() * 100), 4))
+else:
+    print("\n=== Duplicate APPID check ===")
+    print("APPID not present in df")
+
+# -----------------------
+# 3) SCORE checks
+# -----------------------
+if "SCORE" in dq.columns:
+    score = pd.to_numeric(dq["SCORE"], errors="coerce")
+    print("\n=== SCORE checks ===")
+    print("SCORE non-numeric or missing:", int(score.isna().sum()))
+    print("SCORE < 0:", int((score < 0).sum()))
+    print("SCORE > 1:", int((score > 1).sum()))
+    if score.notna().any():
+        print("SCORE min/median/max:", float(score.min()), float(score.median()), float(score.max()))
+        print("SCORE 1%/99%:", float(score.quantile(0.01)), float(score.quantile(0.99)))
+
+# -----------------------
+# 4) TARGET checks
+# -----------------------
+if "TARGET" in dq.columns:
+    t = pd.to_numeric(dq["TARGET"], errors="coerce")
+    print("\n=== TARGET checks ===")
+    print("TARGET non-numeric or missing:", int(t.isna().sum()))
+    vc = dq["TARGET"].value_counts(dropna=False)
+    print("TARGET value counts (head):\n", vc.head(10))
+    non01 = dq.loc[~dq["TARGET"].isin([0, 1]) & dq["TARGET"].notna(), "TARGET"]
+    print("TARGET not in {0,1} (count):", int(non01.shape[0]))
+
+# -----------------------
+# 5) LOANPURPOSECATEGORY checks
+# -----------------------
+if "LOANPURPOSECATEGORY" in dq.columns:
+    lp = dq["LOANPURPOSECATEGORY"].astype("string")
+    print("\n=== LOANPURPOSECATEGORY checks ===")
+    print("Missing:", int(lp.isna().sum()))
+    print("Top values:\n", lp.value_counts(dropna=False).head(15))
+
+    # Optional: check against the segment labels used by dev mapping (case-insensitive)
+    allowed = {"auto", "debt consolidation", "home improvement", "others"}
+    lp_norm = lp.dropna().str.strip().str.lower()
+    invalid = lp_norm[~lp_norm.isin(allowed)]
+    print("Outside {Auto, Debt Consolidation, Home Improvement, others} (count):", int(invalid.shape[0]))
+
+# -----------------------
+# 6) SCORE_DATE parse + sanity
+# -----------------------
+if "SCORE_DATE" in dq.columns:
+    sd = pd.to_datetime(dq["SCORE_DATE"], errors="coerce")
+    print("\n=== SCORE_DATE checks ===")
+    print("Non-parseable or missing:", int(sd.isna().sum()))
+    if sd.notna().any():
+        print("Min/Max:", sd.min(), sd.max())
+
+        # Optional: future-dated rows relative to "today"
+        today = pd.Timestamp.today().normalize()
+        future = (sd > today) & sd.notna()
+        print("Future-dated SCORE_DATE rows:", int(future.sum()))
