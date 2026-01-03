@@ -1,18 +1,13 @@
-import pandas as pd
+# Duplicate check using MODEL_SCORE_ID
+if "MODEL_SCORE_ID" in df.columns:
+    dup_msid = df.duplicated(subset=["MODEL_SCORE_ID"], keep=False)
 
-# assume your 24Q2 dataframe is df
-dq = df[['SCORE', 'LOANPURPOSECATEGORY', 'TARGET', 'SCORE_DATE', 'APP_ID']].copy()
+    print("=== Duplicate MODEL_SCORE_ID check ===")
+    print("Duplicate rows:", int(dup_msid.sum()))
+    print("Duplicate pct:", round(float(dup_msid.mean() * 100), 4))
 
-# Force SCORE_DATE to be tz-aware UTC (mixed tz / strings become consistent; bad rows -> NaT)
-sd = pd.to_datetime(dq['SCORE_DATE'], errors='coerce', utc=True)
-
-# tz-aware "today" in UTC
-today_utc = pd.Timestamp.now(tz='UTC').normalize()
-
-# Now this comparison is tz-aware vs tz-aware (no tz-naive anywhere)
-future = sd.gt(today_utc) & sd.notna()
-
-print("SCORE_DATE unparsable / missing:", int(sd.isna().sum()))
-print("SCORE_DATE min:", sd.min())
-print("SCORE_DATE max:", sd.max())
-print("Future-dated SCORE_DATE rows:", int(future.sum()))
+    # Optional: number of unique MODEL_SCORE_IDs
+    print("Total rows:", len(df))
+    print("Unique MODEL_SCORE_IDs:", df["MODEL_SCORE_ID"].nunique())
+else:
+    print("MODEL_SCORE_ID not present in df")
