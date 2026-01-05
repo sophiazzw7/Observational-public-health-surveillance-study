@@ -1,16 +1,1 @@
-Hi [Developer Name],
-
-I wanted to follow up and let you know that, as part of the annual review for **MOD13627**, MRO plans to raise **two sub-issues** based on the observations below. Both will carry a **90-day due date**.
-
-1. **Model Tier – Data Availability and Stability**
-   In Section 2 (Model Tier Support) of the MDD, Data Availability and Data Stability are currently documented as “High.” Per the model risk tiering procedure, when development data are not limited and are stable, both selections should be “Low.” MRO will raise a sub-issue to align the documentation with the procedure.
-
-2. **OGM Data Controls Documentation**
-   The data controls applied to OGM data are not currently documented in the MDD. MRO will raise a sub-issue requesting the MDD be updated to include a description of the data controls used for OGM reporting.
-
-For planning purposes, MRO is targeting **January 7** to close the annual review. If you’d like to make a quick update to the model tier documentation in the MDD before then, we can reflect that in the final review package.
-
-Please let me know if you’d like to discuss either item or have questions.
-
-Best,
-Phoebe
+Apologies for the short notice on this — the validation schedule was recently shortened, which accelerated the review timeline.
