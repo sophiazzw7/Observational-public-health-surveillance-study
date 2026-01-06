@@ -1,1 +1,31 @@
-Apologies for the short notice on this — the validation schedule was recently shortened, which accelerated the review timeline.
+Got it — I’ll **summarize the methodology** first, then give a **clear MRO-style assessment of whether it continues to be valid**, keeping the tone aligned with annual validation expectations (concise, non-inferential, defensible).
+
+---
+
+## Methodology Summary
+
+The AA methodology model is a downstream model designed to generate adverse action (AA) reason codes for the upstream MOD13512 credit risk model. Because MOD13512 is developed using XGBoost, a non-linear and non-transparent algorithm, a post-hoc explainability framework is required to support regulatory-compliant explanations.
+
+The methodology consists of two core components:
+
+1. MOD13512 Explainability Module
+   The explainability module is based on Shapley value theory and implemented using the open-source SHAP framework, with model-specific adaptation for tree-based models via TreeSHAP. TreeSHAP is selected over model-agnostic alternatives such as KernelSHAP due to its computational efficiency and accuracy for gradient boosting models. Supporting academic research and vendor documentation indicate that TreeSHAP provides faster and more stable explanations for tree-based models.
+
+   To address computational scalability when using large reference populations, the model applies a Monte Carlo–based simulation approach to estimate feature contributions with a specified confidence level. This approach mitigates excessive run time and reduces instability associated with naive random sampling while maintaining numerical robustness.
+
+2. Reference Group and Feature Attribution Framework
+   Feature-level attribution values are computed relative to a reference group defined as the historical approved customer population, rather than the population mean. This design choice aligns the explanations with the business objective of identifying reasons for rejection, rather than deviations from an average applicant.
+
+   The feature-level attributions are then aggregated into predefined key factors using a rule-based mapping table. This mapping is jointly defined and approved by model development, model ownership, legal, and compliance stakeholders. Aggregation supports interpretability and ensures that the resulting AA reason codes are meaningful and consistent with regulatory disclosure expectations. The final AA output is based on the ranked contributions of the aggregated key factors.
+
+
+
+Based on the annual validation review, the AA methodology continues to be conceptually sound, technically appropriate, and fit for its intended use.
+
+The use of Shapley value–based explainability remains appropriate for interpreting non-linear, tree-based models such as XGBoost. The selection of TreeSHAP over model-agnostic methods remains justified given the structure of the upstream model and supporting research. The Monte Carlo simulation approach remains a reasonable and effective mitigation for computational complexity associated with large reference populations.
+* The use of a historical approved population as the reference group remains aligned with the stated purpose of generating adverse action reason codes, and ongoing monitoring of the reference group characteristics is in place to address potential underwriting drift.
+* The aggregation of feature-level attributions into predefined key factors continues to support interpretability and regulatory usability, and the additive nature of Shapley values supports this aggregation logic.
+
+There have been no changes to the methodology, model scope, or intended use since the prior review. MRO finds that the AA methodology remains valid and appropriate for continued use in generating adverse action reason codes for the MOD13512 model.
+
+
