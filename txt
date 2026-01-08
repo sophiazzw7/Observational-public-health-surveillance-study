@@ -1,1 +1,11 @@
-The methodology remains unchanged and continues to be conceptually sound and technically appropriate. Stability monitoring across reference population attributes, risk scores, high-frequency decline reasons, and explanation coverage shows no significant shifts, with all metrics remaining within established Green thresholds. MRO finds no performance or methodology concerns. Two documentation-related sub-issues were identified during the review, relating to OGM data control documentation and the model risk tier support table.
+Here’s a **clear, polite email draft** you can use. It’s concise and appropriate for an immigration/visa team.
+
+Hi [Visa Team / Name],
+
+I hope you are doing well. I filed my PERM application in September 2024 and wanted to ask whether you could please share the PERM case number with me for my records.
+
+Thank you very much for your help, and please let me know if you need anything further from me.
+
+Best regards,
+Phoebe Chen
+
