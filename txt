@@ -1,8 +1,14 @@
-Hi [Name],
+MRO expects the developer to provide an additional annual OGM, in addition to the quarterly OGM, as remediation for this sub-issue.
 
-I wanted to follow up to clarify the due date for the sub-issue. While I originally indicated a 90-day timeline, Alex has approved an earlier due date of February 28, 2026.
+This additional annual OGM should include assumption testing, including timing assumptions, as well as component-level testing, covering both the GLGL and Recovery components.
 
-I understand this is sooner than initially communicated, so please let me know if you have any questions or if there are any concerns I should be aware of.
+For the third bullet point, MRO also expects the developer to include an explanation in the MDD regarding the Scaling Factor, noting that it is set to 1 and therefore does not have an impact.
 
-Best,
-Phoebe
+MRO expects the developer to update the model development documentation to provide clear clarifications, justifications, and supporting rationale for the qualitative criteria used in variable selection for both the GLGL and Recovery models.
+
+Hi Ping
+I’m drafting the MRO “expectation from developer” response for the mythology sub-issue on this model.  I kept the language high-level as I’m not very familiar with the detailed variable selection for this model.
+Please feel free to add or refine details as you see appropriate. Let me know if I can help in any way.
+
+
+Thanks, Phoebe
