@@ -1,14 +1,15 @@
-MRO expects the developer to provide an additional annual OGM, in addition to the quarterly OGM, as remediation for this sub-issue.
+Subject: AA0019 – Request for OGM Codes and Data (2025Q1–Q3)
 
-This additional annual OGM should include assumption testing, including timing assumptions, as well as component-level testing, covering both the GLGL and Recovery components.
+Hi Sophie,
 
-For the third bullet point, MRO also expects the developer to include an explanation in the MDD regarding the Scaling Factor, noting that it is set to 1 and therefore does not have an impact.
+I hope you’re doing well. MRO is working on the Annual Review for AA0019.
 
-MRO expects the developer to update the model development documentation to provide clear clarifications, justifications, and supporting rationale for the qualitative criteria used in variable selection for both the GLGL and Recovery models.
+Could you please help drop the OGM codes and data for 2025Q1–2025Q3 to the following location:
+/sasdata/mrmrg1/dev_drop/?
 
-Hi Ping
-I’m drafting the MRO “expectation from developer” response for the mythology sub-issue on this model.  I kept the language high-level as I’m not very familiar with the detailed variable selection for this model.
-Please feel free to add or refine details as you see appropriate. Let me know if I can help in any way.
+If you do not have access to the mrmrg1 folder, please place the files in a read-only folder within the dev location and share the corresponding AD group.
 
+Thank you in advance.
 
-Thanks, Phoebe
+Best,
+Sophia
