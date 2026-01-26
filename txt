@@ -1,17 +1,18 @@
-Subject: AA0019 – Request for OGM Codes and Data (2025Q1–Q3)
+Subject: RE: AA0019 – Request for OGM Codes and Data (2025Q1–Q3)
 
 Hi Sophie,
 
-I hope you’re doing well. MRO is working on the Annual Review for AA0019.
+Thanks for the quick response and the clarification.
 
-Could you please help drop the OGM codes and data for 2025Q1–2025Q3 to the following location:
-/sasdata/mrmrg1/dev_drop/?
+Yes, I do have access to */sasdata/ctmd2/readonly/retail/*. Could you please help drop the 2025Q1 and 2025Q2 OGM codes and data to this location as well?
 
-If you do not have access to the mrmrg1 folder, please place the files in a read-only folder within the dev location and share the corresponding AD group.
+I’ve also browsed through the contents under
+*/sasdata/ctmd2/readonly/retail/2025q3_copy/execution*,
+but since there are multiple subfolders and files in that directory, could you please help pinpoint the specific input data files and code files relevant to AA0019 for the OGM runs? That would be very helpful, as I’m not deeply familiar with the AA0019 setup.
 
-Thank you in advance.
+Separately, just to confirm my understanding: when you mentioned the Bankcard Retail model redevelopment and the availability of new Truist PAD data upon completion, are you referring to the redevelopment of this same model (AA0019), or a different Bankcard Retail model? I want to make sure we are aligning correctly for the Annual Review documentation.
 
-Best,
+Thanks again for your help, and please let me know if there’s anything else I should check on my end.
+
+Best regards,
 Sophia
-
-In addition, we noted that the OGM data sources and controls table (Table 17 in the MDD) still reflects TBD for the portfolio data. Could you please let us know the current status of the PAD dataset and update the data control table accordingly (e.g., data source, ownership, controls, and references), if available?
