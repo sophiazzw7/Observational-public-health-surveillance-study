@@ -13,3 +13,5 @@ Thank you in advance.
 
 Best,
 Sophia
+
+In addition, we noted that the OGM data sources and controls table (Table 17 in the MDD) still reflects TBD for the portfolio data. Could you please let us know the current status of the PAD dataset and update the data control table accordingly (e.g., data source, ownership, controls, and references), if available?
