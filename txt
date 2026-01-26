@@ -1,18 +1,10 @@
-Subject: RE: AA0019 – Request for OGM Codes and Data (2025Q1–Q3)
-
 Hi Sophie,
 
-Thanks for the quick response and the clarification.
+Thank you so much for the detailed explanation and for confirming where the files will be moved — this is very helpful.
 
-Yes, I do have access to */sasdata/ctmd2/readonly/retail/*. Could you please help drop the 2025Q1 and 2025Q2 OGM codes and data to this location as well?
+One quick follow-up question: for the three quarters (2025Q1–Q3), would it be possible to also share or point us to the macroeconomic variables used in the OGM (e.g., the MEV datasets or their location)? This would help us complete our review.
 
-I’ve also browsed through the contents under
-*/sasdata/ctmd2/readonly/retail/2025q3_copy/execution*,
-but since there are multiple subfolders and files in that directory, could you please help pinpoint the specific input data files and code files relevant to AA0019 for the OGM runs? That would be very helpful, as I’m not deeply familiar with the AA0019 setup.
+Thanks again for your help, and please let me know if there’s anything we should coordinate on from our side.
 
-Separately, just to confirm my understanding: when you mentioned the Bankcard Retail model redevelopment and the availability of new Truist PAD data upon completion, are you referring to the redevelopment of this same model (AA0019), or a different Bankcard Retail model? I want to make sure we are aligning correctly for the Annual Review documentation.
-
-Thanks again for your help, and please let me know if there’s anything else I should check on my end.
-
-Best regards,
+Best,
 Sophia
