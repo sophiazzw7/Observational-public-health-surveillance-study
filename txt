@@ -1,10 +1,2 @@
-Hi Sophie,
-
-Thank you so much for the detailed explanation and for confirming where the files will be moved — this is very helpful.
-
-One quick follow-up question: for the three quarters (2025Q1–Q3), would it be possible to also share or point us to the macroeconomic variables used in the OGM (e.g., the MEV datasets or their location)? This would help us complete our review.
-
-Thanks again for your help, and please let me know if there’s anything we should coordinate on from our side.
-
-Best,
-Sophia
+Thank you for sharing the PoC effort — I’m excited to support.
+Most of the models I’ve recently worked on have been vendor models, so I don’t have a strong internal model preference to recommend at this point. I’m flexible to help as needed.
