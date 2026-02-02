@@ -1,13 +1,12 @@
-Hi [Name],
+Hi Sophie,
 
-I wanted to check in about the DFR LGD limited-scope validation.
+Hope you’re doing well. I wanted to follow up on the AA0019 OGM codes and data, as it’s been about a week. We’re currently targeting a review close around **February 20**, so we’d appreciate it if you could share the data when available or let us know the expected timing.
 
-I was originally supporting this as the secondary validator, but Rebecca has let me know she won’t be able to commit to this task. At the same time, I’m currently covering several full-scope validation, annual review, and a few limited-scopes, with a couple more tasks coming up soon.
+Separately, we had a clarification request for the **model documentation**. In **Table 1 (Upstream Models, EUCs, and Non-Models)**, could you please explicitly indicate which items are considered models versus non-models/EUCs?
 
-I also didn’t participate in the initial full-scope validation of the RAC models, so there would be some ramp-up needed on the model background and prior validation context. Given that, I wanted to ask whether we could involve an additional resource, ideally someone who’s more familiar with the RAC models to help support this review.
+In addition, for the listed upstream and downstream models, we wanted to confirm the linkage reflected in the MDD. We will share examples from other CCAR model documentations to illustrate the assumed consistency in upstream and downstream linkages, and would appreciate it if you could help verify and clarify the linkages specific to AA0019.
 
-Happy to talk through options or adjust as needed. Just wanted to flag this early.
+Thanks very much for your help, and happy to discuss if needed.
 
-Thanks,
-Sophia
-
+Best,
+Phoebe
