@@ -1,12 +1,1 @@
-Hi Sophie,
-
-Hope you’re doing well. I wanted to follow up on the AA0019 OGM codes and data, as it’s been about a week. We’re currently targeting a review close around **February 20**, so we’d appreciate it if you could share the data when available or let us know the expected timing.
-
-Separately, we had a clarification request for the **model documentation**. In **Table 1 (Upstream Models, EUCs, and Non-Models)**, could you please explicitly indicate which items are considered models versus non-models/EUCs?
-
-In addition, for the listed upstream and downstream models, we wanted to confirm the linkage reflected in the MDD. We will share examples from other CCAR model documentations to illustrate the assumed consistency in upstream and downstream linkages, and would appreciate it if you could help verify and clarify the linkages specific to AA0019.
-
-Thanks very much for your help, and happy to discuss if needed.
-
-Best,
-Phoebe
+In addition, for the upstream and downstream models listed in the MDD, we would like to confirm the linkage reflected for AA0019. As a reference point, we plan to share examples from another CCAR model, as our general assumption is that upstream and downstream linkages are largely consistent across CCAR models.Separately, we have a documentation update request for the MDD. In Table 1 (Upstream Models, EUCs, and Non-Models), could you please update the table to explicitly label which items are models versus non-models/EUCs?
