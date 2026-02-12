@@ -1,56 +1,14 @@
-Monitoring was not added (no separate metric + threshold), and instead assessed for reasonableness.
+xSubject: Follow-up Questions on DFR LGD Remediation
 
-[MRO reviewed this assumption and confirmed that 63.8% of recoveries (count-based) occur within 8 quarters of default. 77.6% of recovery balances occur within 8 quarters of default.]
+Hi [Name],
 
-The question we raised was whether 8 quarters is appropriate for the recovery timing assumption.
+I hope you are doing well.
 
-Please confirm:
+Please see the attached questions regarding the DFR LGD remediation updates. These primarily relate to threshold changes, recovery timing assumptions, scaling factor methodology, and monitoring of retained variables.
 
-Whether this assumption will continue to be reviewed periodically.
+When you have a chance, we would appreciate your clarification and any supporting data referenced in the documentation.
 
-Whether the supporting data and calculations for the 63.8% and 77.6% figures can be provided.
+Please let me know if it would be easier to discuss live.
 
-Recovery comparison (Sheffield example)
-
-We asked for justification and monitoring of recovery similar to the Sheffield example:
-Test = development numbers; Production = updated current numbers.
-
-Please confirm whether this comparison was performed and share the supporting results.
-
-c) Scaling factor (CCAR)
-
-It is stated that this is already justified in the MDD:
-
-“For CCAR, only the 9th quarter shows a consistent difference over the time periods, so the scaling factor is set to 1.98. The scaling factor is set to 1 for all other quarters. For CECL, differences are small, so the scaling factor is set to 1.”
-
-However, the need for the scaling factor in the CCAR metric requires further explanation. Since the CCAR prediction is based on 9 quarters, the need for an adjustment to actuals using lifetime NCO losses is unclear.
-
-Please clarify:
-
-How the 1.98 was calculated (please share the numbers and calculation).
-
-The data supporting the ratio of true actual lifetime NCO to truncated lifetime NCO at each quarter.
-
-Please also share the data from Steps 1–5:
-
-Collect actual historical values for each period from the model development data extraction process. The backtesting window aligns with that used for the performance metric thresholds (Section 9.1.2.1).
-
-Compute the true quarterly actual lifetime NCO for each starting backtest date, including all observed history through June 2025.
-
-Compute the truncated quarterly actual lifetime NCO for each starting backtest date, including only data through the backtest horizon (9 quarters for CCAR).
-
-Calculate the ratio of true actual lifetime NCO to truncated lifetime NCO at each quarter.
-
-Compute the Lifetime LGD Scaling Factor by averaging the ratios across periods.
-
-d) Monitoring of retained variables (dpd_90_flag and STI_pre_merger)
-
-These two variables were retained because they are statistically significant and help anchor the baseline effect.
-
-MRO agrees they have high contribution to the model; however, less reliance on backward-looking variables is recommended.
-
-Please confirm:
-
-These two variables will be monitored in the PSA analysis.
-
-They will be monitored in final model input form (including transformations of raw data) using PSI analysis, consistent with Section 6.2 of the MDD.
+Thank you,
+Phoebe
