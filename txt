@@ -1,14 +1,7 @@
-xSubject: Follow-up Questions on DFR LGD Remediation
-
 Hi [Name],
 
-I hope you are doing well.
+Hope you’re doing well.
 
-Please see the attached questions regarding the DFR LGD remediation updates. These primarily relate to threshold changes, recovery timing assumptions, scaling factor methodology, and monitoring of retained variables.
+I’m sharing the attached questions related to the DFR LGD remediation updates. Most of them focus on thresholds, recovery timing, scaling factor methodology, and monitoring of retained variables.
 
-When you have a chance, we would appreciate your clarification and any supporting data referenced in the documentation.
-
-Please let me know if it would be easier to discuss live.
-
-Thank you,
-Phoebe
+Whenever you get a chance, could you please take a look and let us know your thoughts? Happy to discuss live if that’s easier.
