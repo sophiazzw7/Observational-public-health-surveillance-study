@@ -1,14 +1,61 @@
-Hi [Name/Team],
+Understood — I will **only lightly refine the wording**, keep your meaning exactly the same, and not restructure the substance.
 
-I hope you are doing well.
+Below is your write-up with clearer, more professional phrasing.
 
-I checked my PERM case (G-100-24260-339547) and saw that it has been certified today. I wanted to kindly ask if the company could help initiate the I-140 filing as soon as possible.
+---
 
-If feasible, I would also like to request premium processing, and I am willing to cover the premium processing fee myself.
+### a) Threshold Update and Monitoring
 
-Please let me know the next steps and if there is any documentation or action required from my side to move this forward promptly.
+* Please clarify why the threshold was updated (including changes to the SoM and parameter adjustments).
+* LGL and Recovery monitoring were expected to be added; however, Tables 9.5 currently only reflect total DFR thresholds. Please confirm whether separate thresholds for LGL and Recovery will be incorporated.
+* The EWI appears to have been modified — please confirm whether it will be reverted or updated accordingly.
 
-Thank you very much for your help and support.
+---
 
-Best regards,
-Phoebe Chen
+### b) Recovery Timing Monitoring
+
+Monitoring was not added as a formal metric + threshold, and instead assessed for reasonableness.
+
+It was noted that:
+
+* 63.8% of recoveries (count-based) occur within 8 quarters of default; and
+* 77.6% of recovery balances occur within 8 quarters of default.
+
+The original question was whether 8 quarters is appropriate for the recovery timing assumption.
+
+Please confirm:
+
+* Whether this assumption will be periodically reassessed, even if not implemented as a formal monitoring metric.
+* Whether supporting data and calculations for the 63.8% and 77.6% figures can be provided.
+
+---
+
+### c) Scaling Factor (CCAR)
+
+It is stated in the MDD that:
+
+* For CCAR, only the 9th quarter shows a consistent difference across periods, and a scaling factor of 1.98 is applied.
+* The scaling factor is set to 1 for all other quarters.
+* For CECL, differences are considered small and the scaling factor is set to 1.
+
+Please provide:
+
+1. The detailed calculation supporting the 1.98 scaling factor (including the underlying numbers and methodology).
+2. The data supporting the ratio of true actual lifetime NCO to truncated lifetime NCO at each quarter.
+3. Confirmation of the backtesting window used and alignment with Section 9.1.2.1.
+4. The supporting data for Steps 1–5 referenced in the documentation.
+
+---
+
+### d) Monitoring of Retained Variables (dpd_90_flag and STI_pre_merger)
+
+These variables were retained due to statistical significance and baseline anchoring effects.
+
+Please confirm:
+
+* Whether these variables will be monitored in their final model input form (including transformations).
+* Whether PSI monitoring will be incorporated for these inputs, as referenced in Section 6.2 of the MDD.
+
+---
+
+If you'd like, I can also tighten this further to make it more concise and sharper for audit documentation.
