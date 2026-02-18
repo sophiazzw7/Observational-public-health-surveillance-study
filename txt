@@ -1,6 +1,49 @@
-Hi Adam,
+If he says: “Tell me about yourself.”
 
-Just wanted to follow up on the DFR LGD remediation questions shared last week. Please let us know if you’ve had a chance to review, or if a quick discussion would be helpful.
+I’ve been on the team about four years now. Before that, I worked on developing machine learning models in medical research. My background is in statistics.
 
-Thank you,
-Sophia
+Since joining here, I’ve mostly worked on ML-related validations and some of the more technical models. I’ve also led a few Python-related projects and helped run internal trainings for the team.
+
+Simple. Clear. Done.
+
+2️⃣ If he asks: “What are you currently working on?”
+
+Right now I’m working on DFR, some Bankcard validations, and Operational Risk models. I also cover the LightStream ML PD model.
+
+A lot of my time lately has been around remediation follow-ups and making sure documentation and testing are tight.
+
+Stable. Responsible.
+
+3️⃣ If he asks: “What do you enjoy working on?”
+
+I enjoy the more technical models, especially machine learning ones. I like digging into the modeling logic and testing assumptions.
+
+I also enjoy building tools in Python to make validation more efficient.
+
+Shows depth without bragging.
+
+4️⃣ If you want to lightly signal growth interest
+
+Over time, I’d like to take on more complex or high-impact models, especially on the ML side. I’m happy to step up where needed.
+
+Not aggressive. Just forward-looking.
+
+5️⃣ If he asks about team involvement
+
+I’ve helped with some Python trainings and shared code templates with the team. I enjoy that part — helping others get more comfortable with the technical side.
+
+Signals leadership without saying “I’m a leader.”
+
+6️⃣ If he asks: “How’s workload?”
+
+Safe answer:
+
+It’s been busy but manageable. A couple of full scopes at the same time, but things are progressing.
+
+Never say overwhelmed in first meeting.
+
+7️⃣ If you want to connect to his AI move
+
+Given your move into AI, I’d definitely be interested in contributing more on the ML side if there’s an opportunity.
+
+Light. Strategic.
