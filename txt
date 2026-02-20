@@ -1,12 +1,9 @@
-Hi Alex,
+Hi Adam,
 
-As discussed last Friday, we need your assistance with sub-issue MIS0001218, bullet A.
+Thank you for the detailed background and the proposed options.
 
-The data dictionary provided by DAO indicates that the tfc_loan_closing_dt field should not be used. However, in code02_data_checks.sas, tfc_loan_closing_dt was used to join the Manheim table to create the original Manheim variables. Remove the statement from the Data Dictionary.
+For MIS0002017, since this involves the GLGL response (the model target), MRO would be comfortable with Option 1 provided the documentation clearly states that the recalculated response in the final GLGL creation script is the only version used in estimation and performance testing, and that the exploratory/EDA version never flows into the final model. We understand the two versions arose from parallel validation/development, but explicit traceability is important given this is the target variable.
 
-For this item, the developer team noted that this issue was previously discussed during validation. As mentioned before, the MD team does not own or produce the Data Dictionary, so they are not able to fulfill this request directly.
+Separately, for MIS0001218 – part CC (segment-level backtesting for the HBBT legacy indicator and Direct Auto indicator), Section 6.1.1.1 references additional backtesting and includes code to generate the figures; however, I’m not able to locate the rendered charts themselves in the MDD. Could you confirm where the final figures are included?
 
-Could you please coordinate with the developer team and advise on remediation for this bullet?
-
-Best regards,
-Sophia
+Thank you again.
