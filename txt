@@ -1,9 +1,99 @@
-Hi Adam,
+/*==========================================================
+ Replicate Lifetime LGD Scaling Factor (CCAR)
+ Source: act.&som._act_final_ccar_all
 
-Thank you for the detailed background and the proposed options.
+ Dev logic:
+   ratio = nco_lifetime / nco_lifetime_trunc
+   scalar = max(avg(ratio), 1) by segment, quarters
+   filter: &date_condition and segment_by in ("total","lgd")
+==========================================================*/
 
-For MIS0002017, since this involves the GLGL response (the model target), MRO would be comfortable with Option 1 provided the documentation clearly states that the recalculated response in the final GLGL creation script is the only version used in estimation and performance testing, and that the exploratory/EDA version never flows into the final model. We understand the two versions arose from parallel validation/development, but explicit traceability is important given this is the target variable.
+%let som = dfr_spm;                 /* <-- set SOM */
+%let cutoff_dt = '31MAR2023'd;      /* <-- match dev date_condition end */
 
-Separately, for MIS0001218 – part CC (segment-level backtesting for the HBBT legacy indicator and Direct Auto indicator), Section 6.1.1.1 references additional backtesting and includes code to generate the figures; however, I’m not able to locate the rendered charts themselves in the MDD. Could you confirm where the final figures are included?
+/* You can replace this with the exact dev macro if you have it */
+%let date_condition = (output_date <= &cutoff_dt);
 
-Thank you again.
+/*----------------------------------------------------------
+1) Prep: compute ratio (true / truncated)
+----------------------------------------------------------*/
+data work.lgd_conversion_prep;
+  set act.&som._act_final_ccar_all;
+
+  /* Match dev filters */
+  where &date_condition
+    and segment_by in ("total","lgd");
+
+  length som $10;
+  som = "&som.";
+
+  /* Defensive checks */
+  if missing(nco_lifetime) then ratio = .;
+  else if missing(nco_lifetime_trunc) or nco_lifetime_trunc = 0 then ratio = .;
+  else ratio = nco_lifetime / nco_lifetime_trunc;
+
+  keep som segment segment_by output_date data_date quarters nco_lifetime nco_lifetime_trunc ratio;
+run;
+
+/*----------------------------------------------------------
+2) Replicate dev output AND also store the raw mean ratio
+   - lgd_lifetime_scalar_raw = avg(ratio)
+   - lgd_lifetime_scalar     = max(avg(ratio), 1)
+----------------------------------------------------------*/
+proc sql;
+  create table work.ret_ogm_lgd_scalar_ccar as
+  select
+      som,
+      segment,
+      segment_by,
+      quarters,
+      avg(ratio) as lgd_lifetime_scalar_raw format=12.6,
+      max(avg(ratio), 1) as lgd_lifetime_scalar format=12.6
+  from work.lgd_conversion_prep
+  where ratio is not null
+  group by som, segment, segment_by, quarters
+  order by som, segment_by, segment, quarters
+  ;
+quit;
+
+/*----------------------------------------------------------
+3) Optional: match dev ad-hoc cleanup (only if applicable)
+----------------------------------------------------------*/
+%macro rec_btu_cleanup;
+  %if %upcase(&som.) = REC_BTU %then %do;
+    data work.ret_ogm_lgd_scalar_ccar;
+      set work.ret_ogm_lgd_scalar_ccar;
+      if quarters = 1 then lgd_lifetime_scalar = 1;
+    run;
+  %end;
+%mend;
+%rec_btu_cleanup;
+
+/*----------------------------------------------------------
+4) Show the exact quarter scalars + raw means (key proof)
+   - If raw mean < 1 for Q1–Q8, scalar becomes 1
+----------------------------------------------------------*/
+proc print data=work.ret_ogm_lgd_scalar_ccar noobs;
+  where quarters in (1,2,3,4,5,6,7,8,9);
+  var som segment_by segment quarters lgd_lifetime_scalar_raw lgd_lifetime_scalar;
+run;
+
+/*----------------------------------------------------------
+5) Diagnostics: why is Q9 high?
+   - Distribution of ratio for Q9 by segment (what drives 1.98)
+----------------------------------------------------------*/
+proc means data=work.lgd_conversion_prep n mean std p50 p75 p90 max min;
+  where quarters = 9 and ratio is not null;
+  class segment_by segment;
+  var ratio;
+run;
+
+/* Optional: list the biggest ratios contributing to Q9 */
+proc sort data=work.lgd_conversion_prep out=work.q9_detail;
+  where quarters = 9 and ratio is not null;
+  by descending ratio;
+run;
+
+proc print data=work.q9_detail(obs=50) noobs;
+  var som segment_by segment output_date data_date quarters nco_lifetime nco_lifetime_trunc ratio;
+run;
