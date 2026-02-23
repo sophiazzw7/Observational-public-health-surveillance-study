@@ -1,5 +1,7 @@
-proc logistic data=scored_train;
-  freq trials;  /* because your "success/trials" is effectively trials replicated */
-  model glgl_response(event='1') = glgl_response_model / nofit;
-  ods select Association;
+proc means data=scored_train n min p1 p50 p99 max nmiss;
+  var success trials glgl_response glgl_response_model;
+run;
+
+proc freq data=scored_train;
+  tables trials / missing;
 run;
