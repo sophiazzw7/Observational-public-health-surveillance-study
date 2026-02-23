@@ -1,7 +1,17 @@
-proc means data=scored_train n min p1 p50 p99 max nmiss;
-  var success trials glgl_response glgl_response_model;
+data rmse_calc;
+  set scored_train;
+  error_sq = (glgl_response - glgl_response_model)**2;
 run;
 
-proc freq data=scored_train;
-  tables trials / missing;
+proc means data=rmse_calc mean;
+  var error_sq;
+  output out=rmse_out mean=mean_sq_error;
+run;
+
+data rmse_out;
+  set rmse_out;
+  rmse = sqrt(mean_sq_error);
+run;
+
+proc print data=rmse_out;
 run;
