@@ -1,1 +1,5 @@
-/* Libraries (match dev program) */ %let root_loc = /sasdata/ctmd4/som_testing/ret_som_testing_dfr_spm/analysis/ogm_thresholds/performance; libname act "&root_loc./data/&som./actual/ccar"; libname outwork "%sysfunc(pathname(work))";
+proc logistic data=scored_train;
+  freq trials;  /* because your "success/trials" is effectively trials replicated */
+  model glgl_response(event='1') = glgl_response_model / nofit;
+  ods select Association;
+run;
