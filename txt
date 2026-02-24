@@ -1,17 +1,1 @@
-data rmse_calc;
-  set scored_train;
-  error_sq = (glgl_response - glgl_response_model)**2;
-run;
-
-proc means data=rmse_calc mean;
-  var error_sq;
-  output out=rmse_out mean=mean_sq_error;
-run;
-
-data rmse_out;
-  set rmse_out;
-  rmse = sqrt(mean_sq_error);
-run;
-
-proc print data=rmse_out;
-run;
+“Since this is probably our last review together, I’d really appreciate your honest take — what do you think I’m doing really well, and where should I push myself more?” “I really appreciated working with you — you pushed me in a good way.”“Since you’re transitioning out, I just want to make sure I’m not missing any big advice from you.” “Since you’re transitioning out, I just want to make sure I’m not missing any big advice from you.”
