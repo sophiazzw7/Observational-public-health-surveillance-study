@@ -1,14 +1,1 @@
-Hi Adam,
-As a follow-up to our discussion, we’ve summarized below the remaining items and documentation updates for alignment and confirmation.
-
-1. [MIS0002016 b]As discussed, we understand that Total DFR remains quarterly, while DFR-LGL and DFR-RCVRY should be updated to annual monitoring.
-Additionally, we will look for the inclusion in the next MDD update of:
-* Clarification on timing of submission (prior to annual review), and
-* Root cause analysis in the event of Metric 1 breaches, conduct component-level tracking for GLGL and Recovery
-2. [MIS0002014 a&c]For consistency with the DFR PD model, could you include similar limitation language noting the use of legacy indicators dpd_90_flg and STI_pre_merger?
-3. [MIS0002013 a]For consistency with the DFR PD model, could you please add similar write-up regarding the depreciation assumption, clarifying that this approach assumes similar depreciation dynamics across new and used vehicles and acknowledging any potential limitation of this simplification?
-4. [MIS000218 t] Could you please update the upstream/downstream models in SNOW?
-5. [MIS000218 cc]Could you please confirm that the direct and indirect auto backtests were generated using correct datasets? MRO’s independent test produced different shapes across the two segments(attached), whereas the figures presented appear highly similar.
-6. [MIS0002017] As discussed, please add clarification in the MDD that the recalculated response in 00_glgl_data_creation.sas is the only version used for estimation and performance testing, and that the exploratory/EDA version does not flow into the final model.
-7. [MIS0002016 a] As discussed, please add annual monitoring of timing assumptions(loss timing and recovery timing).
-8. As discussed, please remove references to MIS0001972/MIS0002011.
+The comparison shows immaterial differences in predicted LGD levels (average absolute difference < 0.2 percentage points per quarter; relative difference < 0.5%), w
