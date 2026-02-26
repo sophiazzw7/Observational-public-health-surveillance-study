@@ -1,1 +1,9 @@
-The comparison shows immaterial differences in predicted LGD levels (average absolute difference < 0.2 percentage points per quarter; relative difference < 0.5%), w
+
+could you please provide:
+1. Wald Chi-square values for:
+    * avg_8q_rate_spread vs other rate spread transformations
+    * avg_8q_Unemployment_Rate vs avg_4q_Unemployment_Rate
+    * Could you please elaborate on what is meant by “long term average matches the lagged timeline of liquidation outcomes”?
+    * 
+2. The correlation value between lag1_Inv_sale_ratio and CPI_New_and_Used_Car to support the multicollinearity statement.
+
