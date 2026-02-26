@@ -1,9 +1,5 @@
+This sub-issue has two parts related to 03_MEV_Selection.sas.
 
-could you please provide:
-1. Wald Chi-square values for:
-    * avg_8q_rate_spread vs other rate spread transformations
-    * avg_8q_Unemployment_Rate vs avg_4q_Unemployment_Rate
-    * Could you please elaborate on what is meant by “long term average matches the lagged timeline of liquidation outcomes”?
-    * 
-2. The correlation value between lag1_Inv_sale_ratio and CPI_New_and_Used_Car to support the multicollinearity statement.
+During our review of the GLGL model, we observed that pd_tob_cnt was selected as a loan-level variable and carried into the combined selection step, even though it does not impact MEV selection and was later removed due to collinearity.
 
+We are also looking to confirm that the implemented selection logic and final selected MEVs in the code align with Section 4.4 and Table 4.2 (Final MEV Shortlist).
