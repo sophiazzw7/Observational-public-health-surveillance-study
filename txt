@@ -1,5 +1,10 @@
-This sub-issue has two parts related to 03_MEV_Selection.sas.
+Hi Adam,
 
-During our review of the GLGL model, we observed that pd_tob_cnt was selected as a loan-level variable and carried into the combined selection step, even though it does not impact MEV selection and was later removed due to collinearity.
+We noted that Sheffield performs the assumptions monitoring in Q3 along with the Q3 OGM report so the results can be reviewed as part of the Annual Review. If you could follow a similar approach, that would work well from our perspective.
 
-We are also looking to confirm that the implemented selection logic and final selected MEVs in the code align with Section 4.4 and Table 4.2 (Final MEV Shortlist).
+Adding component-level tracking is helpful. Since GLGL and Recovery metrics are already included in OGM, root cause analysis would inherently include component-level review when appropriate. No further action is required on this point.
+
+For the annual monitoring of loss timing and recovery timing assumptions, it would be fine to include this under the Other Monitoring Activities section.
+
+Thanks,
+Phoebe
