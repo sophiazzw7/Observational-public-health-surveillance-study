@@ -1,8 +1,6 @@
 Hi Adam,
 
-We noted that Sheffield performs the assumptions monitoring in Q3 along with the Q3 OGM report so the results can be reviewed as part of the Annual Review. If you could follow a similar approach, that would work well from our perspective.
-
-Adding component-level tracking is helpful. Since GLGL and Recovery metrics are already included in OGM, root cause analysis would inherently include component-level review when appropriate. No further action is required on this point.
+We’re fine with items (1) and (2) as long as GLGL and Recovery component-level metrics are included in OGM. With those metrics in place, component-level review would naturally occur if Metric 1 breaches.
 
 For the annual monitoring of loss timing and recovery timing assumptions, it would be fine to include this under the Other Monitoring Activities section.
 
