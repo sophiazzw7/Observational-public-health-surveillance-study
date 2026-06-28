@@ -1,124 +1,221 @@
-/**************************************************************************
-Purpose:
-  Compare FULL model vs model WITHOUT dpd_90_flg and STI_pre_merger
-  on POST–MAR2021 observations only, to assess the impact of inclusion of these two vars
+Yes — I have the full MDD/code context now. Core DQ tests should focus on:
 
-**************************************************************************/
+1. source filtering / uniqueness
+2. score valid range and exclusions
+3. booked vs proxy target construction
+4. performance-window logic
+5. sample split / vintage eligibility
+6. missing score coverage and imputation
+7. weights for co-applicants
+8. reconciliation counts and bad rates by vintage
 
-options mprint mlogic symbolgen;
+Below is a consolidated SAS testing template you can adapt.
 
+```sas
+/* MOD13895 Core Data Quality Testing */
 
-%let cutoff_dt = '31MAR2021'd;
+/* 1. Primary key uniqueness */
+proc sql;
+create table dq_dup_app_applicant as
+select application_nbr, applicant_nbr, count(*) as cnt
+from sb_data.sb_card_data_processed
+group by application_nbr, applicant_nbr
+having calculated cnt > 1;
+quit;
 
-
-/* proc contents data=scored_train; run; */
-/* proc contents data=scored_train_WOvars; run; */
-
-
-
-data scored_train_WOvars_2
-     (keep=tfc_loan_nbr reporting_qtr glgl_response_model_WO);
-  set scored_train_WOvars;
-  glgl_response_model_WO = glgl_response_model;
+/* 2. Required CDE completeness */
+proc means data=sb_data.sb_card_data_processed n nmiss;
+var application_nbr applicant_nbr application_dt vintage
+    CIDS_Blend_Score_v2 Vantage4_Score booked_flg wt;
 run;
 
+/* 3. Valid score ranges */
+proc sql;
+create table dq_score_range as
+select *
+from sb_data.sb_card_data_processed
+where 
+   (CIDS_Blend_Score_v2 ne . and not (397 <= CIDS_Blend_Score_v2 <= 695))
+or (CIDS_Comm_Score_v2  ne . and not (419 <= CIDS_Comm_Score_v2  <= 669))
+or (Vantage4_Score      ne . and not (300 <= Vantage4_Score      <= 850));
+quit;
 
+/* 4. Excluded invalid records check */
+proc sql;
+create table dq_invalid_should_exclude as
+select *
+from sb_data.sb_card_data_processed
+where CIDS_Blend_Score_v2 = 0
+   or CIDS_Comm_Score_v2 = 0
+   or Vantage4_Score = 1;
+quit;
 
-data scored_train_post202103;
-  set scored_train;
-  where reporting_qtr >= &cutoff_dt;
+/* 5. Weight check: application-level guarantor count */
+proc sql;
+create table dq_weight_check as
+select a.application_nbr,
+       count(distinct a.applicant_nbr) as applicant_cnt,
+       sum(a.wt) as sum_wt,
+       min(a.wt) as min_wt,
+       max(a.wt) as max_wt
+from sb_data.sb_card_data_processed a
+group by a.application_nbr
+having abs(calculated sum_wt - 1) > 1e-8;
+quit;
+
+/* 6. Booked / approved logic reasonableness */
+proc freq data=sb_data.sb_card_data_dev;
+tables booked_flg*approval_ind final_decision*approval_ind / missing;
 run;
 
-data scored_train_WOvars_post202103;
-  set scored_train_WOvars_2;
-  where reporting_qtr >= &cutoff_dt;
+/* 7. Target flag validity */
+proc freq data=sb_data.sb_card_data_dev;
+tables bad60_3m bad60_6m bad60_9m bad60_12m bad60_15m bad60_18m bad60_21m bad60_24m / missing;
 run;
 
-
-proc sort data=scored_train_post202103 nodupkey;
-  by tfc_loan_nbr reporting_qtr;
+/* 8. Bad flag monotonicity across windows */
+data dq_bad_window_nonmono;
+set sb_data.sb_card_data_dev;
+if bad60_3m > bad60_6m or bad60_6m > bad60_9m or bad60_9m > bad60_12m or
+   bad60_12m > bad60_15m or bad60_15m > bad60_18m or bad60_18m > bad60_21m or
+   bad60_21m > bad60_24m;
 run;
 
-proc sort data=scored_train_WOvars_post202103 nodupkey;
-  by tfc_loan_nbr reporting_qtr;
+/* 9. Booked records: target should come from internal performance */
+proc sql;
+create table dq_booked_target_missing as
+select *
+from sb_data.sb_card_data_dev
+where booked_flg='Y' and bad60_24m is missing;
+quit;
+
+/* 10. Non-booked proxy performance coverage */
+proc freq data=sb_data.sb_card_data_dev;
+tables population_ind*bad60_24m / missing;
 run;
 
-data both datasetonly datasetbonly;
-  merge scored_train_post202103(in=a)
-        scored_train_WOvars_post202103(in=b);
-  by tfc_loan_nbr reporting_qtr;
+proc sql;
+create table dq_proxy_coverage as
+select vintage,
+       count(*) as nonbooked_cnt,
+       sum(case when population_ind='NOT BOOKED WITH PROXY' then 1 else 0 end) as proxy_cnt,
+       calculated proxy_cnt / calculated nonbooked_cnt as proxy_coverage format=percent8.2
+from sb_data.sb_card_data_dev
+where booked_flg ne 'Y'
+group by vintage;
+quit;
 
-  if a and b then output both;
-  else if a and not b then output datasetonly;
-  else if b and not a then output datasetbonly;
+/* 11. Vintage eligibility / sample split */
+proc freq data=sb_data.sb_card_data_dev;
+tables archive_dt*vintage / missing;
 run;
 
+proc sql;
+select count(*) as dev_cnt from sb_data.sb_card_data_dev;
+select count(*) as insample_cnt from sb_data.sb_card_data_insample;
+select count(*) as holdout_cnt from sb_data.sb_card_data_holdout;
+select count(*) as oot_cnt from sb_data.sb_card_data_oot;
+quit;
 
-proc freq data=scored_train_post202103;
-  tables dpd_90_flg STI_pre_merger / missing;
+/* 12. Training / holdout split ratio and bad-rate preservation */
+proc sql;
+create table dq_split_check as
+select vintage, bad60_24m,
+       sum(case when urn in (select urn from sb_data.sb_card_data_insample) then 1 else 0 end) as train_cnt,
+       sum(case when urn in (select urn from sb_data.sb_card_data_holdout) then 1 else 0 end) as holdout_cnt,
+       calculated train_cnt / (calculated train_cnt + calculated holdout_cnt) as train_pct format=percent8.2
+from sb_data.sb_card_data_dev
+group by vintage, bad60_24m;
+quit;
+
+/* 13. Missing score coverage by vintage */
+proc sql;
+create table dq_score_coverage as
+select vintage,
+       count(*) as total_cnt,
+       sum(CIDS_Blend_Score_v2 ne .) as cids_cnt,
+       sum(Vantage4_Score ne .) as vantage_cnt,
+       sum(CIDS_Blend_Score_v2 ne . and Vantage4_Score ne .) as both_cnt,
+       calculated cids_cnt / calculated total_cnt as cids_cov format=percent8.2,
+       calculated vantage_cnt / calculated total_cnt as vantage_cov format=percent8.2,
+       calculated both_cnt / calculated total_cnt as both_cov format=percent8.2
+from sb_data.sb_card_data_dev
+group by vintage;
+quit;
+
+/* 14. Missing-score scenario coverage */
+proc freq data=sb_data.sb_card_data_dev;
+tables CIDS_Blend_FLAG*Vantage4_FLAG / missing;
 run;
 
+/* 15. Imputation reasonableness */
+proc sql;
+create table dq_impute_check as
+select *
+from sb_card_data_insample_impute
+where (CIDS_Blend_Score_v2 = . and Vantage4_Score = .)
+   or (CIDS_Blend_Score_v2 = . and CIDS_BLEND_v2_local_fit = .)
+   or (Vantage4_Score = . and Vantage_local_fit = .);
+quit;
 
-data check;
-  set both;
-
-  difference = glgl_response_model_WO - glgl_response_model;
-
-  if difference > 0 then type='higher_wo';
-  else if difference = 0 then type='equal';
-  else type='lower_wo';
+/* 16. Local fit monotonicity: bad rate should decrease as score increases */
+proc sort data=sb_out.CIDS_BLENDED_v2_local_fit2 out=cids_fit;
+by predictor;
 run;
 
-proc freq data=check;
-  tables type / missing;
+data dq_cids_nonmono;
+set cids_fit;
+prev_fit = lag(localfit);
+if _n_ > 1 and localfit > prev_fit then output;
 run;
 
-
-
-proc means data=check n mean std p1 p5 p50 p95 p99 min max;
-  var difference glgl_response_model glgl_response_model_WO;
+proc sort data=sb_out.Vantage4_local_fit2 out=v4_fit;
+by predictor;
 run;
 
-/* Percent difference (avoid divide-by-zero) */
-data check2;
-  set check;
-  if glgl_response_model ne 0 then pct_diff = difference / glgl_response_model;
-  else pct_diff = .;
+data dq_vantage_nonmono;
+set v4_fit;
+prev_fit = lag(localfit);
+if _n_ > 1 and localfit > prev_fit then output;
 run;
 
-proc means data=check2 n mean std p1 p5 p50 p95 p99 min max;
-  var pct_diff;
+/* 17. Final score / PD sanity */
+data dq_pd_check;
+set sb_card_scored_calib2;
+pd = exp(default)/(1+exp(default));
+if pd < 0 or pd > 1 or pd = . then output;
 run;
 
+/* 18. Conservative calibration target check: booked in-time PD around 8% */
+proc sql;
+select sum(pd*wt)/sum(wt) as avg_pd format=percent8.2
+from sb_card_scored_intime_booked3;
+quit;
 
-proc means data=check nway;
-  class reporting_qtr;
-  var glgl_response_model glgl_response_model_WO difference;
-  output out=diff_by_qtr
-    n()=n_obs
-    mean(glgl_response_model)=mean_full
-    mean(glgl_response_model_WO)=mean_wo
-    mean(difference)=mean_diff
-    ;
-run;
+/* 19. Count and bad-rate by vintage for reconciliation */
+proc sql;
+create table dq_vintage_summary as
+select vintage,
+       population_ind,
+       count(*) as cnt,
+       sum(wt) as wt_cnt,
+       sum(bad60_24m*wt)/sum(wt) as bad_rate_24m format=percent8.2,
+       sum(CIDS_Blend_Score_v2 ne .)/count(*) as cids_cov format=percent8.2,
+       sum(Vantage4_Score ne .)/count(*) as v4_cov format=percent8.2
+from sb_data.sb_card_data_dev
+group by vintage, population_ind;
+quit;
 
-proc print data=diff_by_qtr;
-  format reporting_qtr date9.;
-run;
+/* 20. Output all exceptions */
+proc print data=dq_dup_app_applicant(obs=50); title "Duplicate App/Applicant"; run;
+proc print data=dq_score_range(obs=50); title "Score Range Exceptions"; run;
+proc print data=dq_invalid_should_exclude(obs=50); title "Invalid Exclusion Exceptions"; run;
+proc print data=dq_weight_check(obs=50); title "Weight Exceptions"; run;
+proc print data=dq_bad_window_nonmono(obs=50); title "Bad Window Non-Monotonicity"; run;
+proc print data=dq_booked_target_missing(obs=50); title "Booked Missing Target"; run;
+proc print data=dq_impute_check(obs=50); title "Imputation Exceptions"; run;
+proc print data=dq_cids_nonmono(obs=50); title "CIDS Local Fit Non-Monotonic"; run;
+proc print data=dq_vantage_nonmono(obs=50); title "Vantage Local Fit Non-Monotonic"; run;
+```
 
-
-data diff_by_qtr2;
-  set diff_by_qtr;
-  abs_mean_diff = abs(mean_diff);
-  pct_mean_diff = .;
-  if mean_full ne 0 then pct_mean_diff = mean_diff / mean_full;
-run;
-
-proc means data=diff_by_qtr2 max;
-  var abs_mean_diff;
-run;
-
-proc means data=diff_by_qtr2 min max mean p50 p95;
-  var pct_mean_diff;
-run;
-
+The most important validator tests are **uniqueness, score range/exclusion, 24-month target construction, proxy coverage, vintage split, missing-score imputation, and calibration-to-8% reasonableness**.
